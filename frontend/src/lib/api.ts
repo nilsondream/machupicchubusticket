@@ -17,7 +17,7 @@ export interface AuthResponse {
   refreshToken?: string
 }
 
-const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000"
+const backendUrl = process.env.NEXT_PUBLIC_BACKEND_URL ?? "http://localhost:4000/api"
 
 const fetchJson = async (input: RequestInfo, init?: RequestInit) => {
   const response = await fetch(input, {

@@ -1,59 +1,58 @@
 "use client"
 
-import { useBooking } from "@/context/bus-ticket"
 import { BusFront, Calendar, ChevronDown, Minus, Plus, UserRound } from "lucide-react"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { useRouter } from "next/navigation"
-import { FormEvent, useEffect, useState, useRef } from "react"
+import { FormEvent, useEffect, useState, useRef, useMemo } from "react"
 import { cn } from "@/lib/utils"
-import { addDays, addMonths, format, parseISO } from "date-fns"
+import { addDays, format, parseISO } from "date-fns"
 import { es } from "date-fns/locale"
-import { Button } from "../ui/button"
+import { Button } from "@/components/ui/button"
 import { toast } from "sonner"
-import { TicketType } from "@/types/tickets"
+import { busTicketData } from "@/data/bus-ticket-data"
+import { useReservationStore } from "@/store/reservation-store"
 
-const DEFAULT_PRODUCT_CODE = "BUS-MACHUPICCHU"
+const SearchReservation = () => {
+  const router = useRouter();
 
-const SearchBusTicket = () => {
-  const { updateBooking } = useBooking()
-  const [travelType, setTravelType] = useState<string>("") // id del ticket seleccionado
-  const [departureDate, setDepartureDate] = useState("")
-  const [loading, setLoading] = useState(true)
-  const [tickets, setTickets] = useState<TicketType[]>([])
+  const {
+    travelType,
+    travelDate,
+    passengers,
 
-  // Passenger counts por tipo de pasajero (más flexible)
-  const [passengerCounts, setPassengerCounts] = useState<Record<string, number>>({
-    ADULT: 1,
-    CHILD: 0,
-  })
+    setTravelType,
+    setTravelDate,
 
-  const router = useRouter()
+    increaseAdults,
+    decreaseAdults,
+    increaseChildren,
+    decreaseChildren,
+  } = useReservationStore();
 
-  // Cargar tickets
-  useEffect(() => {
-    async function loadTickets() {
-      try {
-        const response = await fetch("/api/tickets");
-        const data: TicketType[] = await response.json();
-        setTickets(data);
+  const selectedTicket = useMemo(() =>
+    busTicketData.find((ticket) => ticket.typeTravel === travelType),
+    [travelType]
+  );
 
-        // Seleccionar el primero por defecto si no hay selección
-        if (data.length > 0 && !travelType) {
-          setTravelType(data[0].id);
-        }
-      } catch (error) {
-        console.error(error);
-        toast.error("Error al cargar los tipos de tickets");
-      } finally {
-        setLoading(false);
-      }
+  const totalPassengers = passengers.adults + passengers.children;
+
+  function handleContinue(
+    e: FormEvent<HTMLFormElement>
+  ) {
+    e.preventDefault();
+
+    if (!travelType) {
+      toast.error("Selecciona un tipo de ticket");
+      return;
     }
-    loadTickets();
-  }, []);
 
-  const selectedTicket = tickets.find(t => t.id === travelType);
+    if (!travelDate) {
+      toast.error("Selecciona una fecha");
+      return;
+    }
 
-  const totalPassengers = Object.values(passengerCounts).reduce((a, b) => a + b, 0);
+    router.push("/reservation");
+  }
 
   // Refs y estados de dropdowns...
   const typeRef = useRef<HTMLDivElement>(null);
@@ -84,42 +83,9 @@ const SearchBusTicket = () => {
     };
   }, [openType, openCalendar, openPassenger]);
 
-  const updateCount = (type: string, delta: number) => {
-    setPassengerCounts((prev) => {
-      const min = type === "ADULT" ? 1 : 0;
-      const next = Math.max(min, Math.min(9, (prev[type] ?? 0) + delta));
-      return { ...prev, [type]: next };
-    });
-  };
-
-  const handleSearch = (e: FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!travelType || !departureDate) {
-      toast.warning("Por favor completa todos los campos");
-      return;
-    }
-    if (totalPassengers < 1) {
-      toast.warning("Debe haber al menos un pasajero");
-      return;
-    }
-
-    updateBooking({
-      travelType: travelType as "roundtrip" | "oneway-go" | "oneway-return",
-      departureDate,
-      returnDate: null,
-      passengers: totalPassengers,
-      productCode: DEFAULT_PRODUCT_CODE,
-      ticketTypeId: travelType,
-      ticketCounts: passengerCounts,
-      passengerDetails: [],
-    });
-
-    router.push("/reservation");
-  };
-
   return (
     <div className="-mt-14 absolute z-20 w-full max-md:px-4 max-md:-mt-37">
-      <form onSubmit={handleSearch}>
+      <form onSubmit={handleContinue}>
         <div className="bg-background dark:bg-muted rounded-full max-md:rounded-3xl p-4 shadow-2xl max-md:shadow-xl max-w-6xl mx-auto flex max-md:flex-col items-center gap-4 max-md:p-2">
           <div className="grid grid-cols-3 items-center gap-4 max-md:gap-0 w-full max-md:grid-cols-1">
 
@@ -132,13 +98,13 @@ const SearchBusTicket = () => {
                 onClick={() => setOpenType(!openType)}
               >
                 <label className="uppercase text-xs max-md:text-[10px] tracking-widest text-muted-foreground">
-                  Tipo de ticket
+                  Trip Type
                 </label>
                 <div className="cursor-pointer w-full font-semibold mt-2 max-md:mt-0 flex items-center justify-between">
                   <div className="flex items-center gap-3 max-md:gap-2 text-nowrap text-lg max-md:text-base">
                     <BusFront className="size-5 max-md:size-4" />
                     <span className="line-clamp-1">
-                      {selectedTicket?.name ?? "Selecciona ticket"}
+                      {selectedTicket?.name ?? "Select trip type"}
                     </span>
                   </div>
                   <ChevronDown size={20} className={cn("transition-transform md:hidden", openType && "rotate-180")} />
@@ -148,12 +114,12 @@ const SearchBusTicket = () => {
               {openType && (
                 <div className="absolute top-full left-0 w-full mt-1 z-50">
                   <div className="rounded-3xl p-2 border overflow-hidden bg-background dark:bg-muted shadow-xl space-y-1">
-                    {tickets.map((ticket) => (
+                    {busTicketData.map((ticket) => (
                       <button
                         key={ticket.id}
                         type="button"
                         onClick={() => {
-                          setTravelType(ticket.id);
+                          setTravelType(ticket.typeTravel);
                           setOpenType(false);
                         }}
                         className={cn("cursor-pointer w-full px-3 py-2 text-left rounded-xl font-medium",
@@ -177,15 +143,15 @@ const SearchBusTicket = () => {
                 onClick={() => setOpenCalendar(!openCalendar)}
               >
                 <label className="uppercase text-xs max-md:text-[10px] tracking-widest text-muted-foreground text-nowrap">
-                  Fecha de viaje
+                  Travel Date
                 </label>
                 <div className="cursor-pointer w-full font-semibold mt-2 max-md:mt-0 flex items-center justify-between">
                   <div className="flex items-center gap-3 max-md:gap-2 text-nowrap text-lg max-md:text-base">
                     <Calendar className="size-5 max-md:size-4" />
                     <span className="line-clamp-1">
-                      {departureDate
-                        ? format(parseISO(departureDate), "EEE dd, MMMM", { locale: es })
-                        : "Selecciona una fecha"}
+                      {travelDate
+                        ? format(parseISO(travelDate), "EEEE dd, MMMM", { locale: es })
+                        : "Select a date"}
                     </span>
                   </div>
                   <ChevronDown size={20} className={cn("opacity-0 max-md:opacity-100", openCalendar && "rotate-180")} />
@@ -199,14 +165,14 @@ const SearchBusTicket = () => {
                       className="w-full rounded-3xl border shadow-xl"
                       mode="single"
                       locale={es}
-                      selected={departureDate ? parseISO(departureDate) : undefined}
+                      selected={travelDate ? parseISO(travelDate) : undefined}
                       onSelect={(date) => {
                         if (date) {
-                          setDepartureDate(format(date, "yyyy-MM-dd"));
+                          setTravelDate(format(date, "yyyy-MM-dd"));
                           setOpenCalendar(false);
                         }
                       }}
-                      disabled={(date) => date <= addDays(new Date(), 0) || date > addMonths(new Date(), 6)}
+                      disabled={(date) => date <= addDays(new Date(), 0)}
                     />
                   </div>
                 </div>
@@ -222,12 +188,12 @@ const SearchBusTicket = () => {
                 onClick={() => setOpenPassenger(!openPassenger)}
               >
                 <label className="uppercase text-xs max-md:text-[10px] tracking-widest text-muted-foreground text-nowrap">
-                  Pasajeros
+                  Passengers
                 </label>
                 <div className="cursor-pointer w-full font-semibold mt-2 max-md:mt-0 flex items-center justify-between">
                   <div className="flex items-center gap-3 max-md:gap-2 text-nowrap text-lg max-md:text-base">
                     <UserRound className="size-5 max-md:size-4" />
-                    <span>{totalPassengers} {totalPassengers === 1 ? "Pasajero" : "Pasajeros"}</span>
+                    <span>{totalPassengers} {totalPassengers === 1 ? "Passenger" : "Passengers"}</span>
                   </div>
                   <ChevronDown size={20} className={cn("transition-transform md:hidden", openPassenger && "rotate-180")} />
                 </div>
@@ -237,15 +203,16 @@ const SearchBusTicket = () => {
                 <div className="absolute top-full left-0 w-full mt-1 z-50">
                   <div className="rounded-3xl p-2 border overflow-hidden bg-background dark:bg-muted shadow-xl space-y-0">
                     {Object.entries(selectedTicket.prices).map(([passengerKey]) => {
-                      const count = passengerCounts[passengerKey.toUpperCase()] ?? 0;
+                      const count = passengerKey === "adult" ? passengers.adults : passengers.children;
 
                       return (
                         <div
                           key={passengerKey}
                           className="w-full px-3 py-2 flex items-center justify-between border-b last:border-none"
                         >
-                          <div className="flex flex-col gap-1">
+                          <div className="flex flex-col gap-0.5">
                             <p className="font-semibold capitalize">{passengerKey}</p>
+                            {passengerKey === "child" && <span className="text-xs text-muted-foreground">({selectedTicket.prices.child.description})</span>}
                           </div>
 
                           <div className="flex items-center gap-3">
@@ -254,8 +221,10 @@ const SearchBusTicket = () => {
                               variant="outline"
                               size="icon-sm"
                               className="rounded-full"
-                              disabled={count <= (passengerKey === "adult" ? 1 : 0)}
-                              onClick={() => updateCount(passengerKey.toUpperCase(), -1)}
+                              disabled={passengerKey === "adult" ? passengers.adults <= 1 : passengers.children <= 0}
+                              onClick={() => {
+                                passengerKey === "adult" ? decreaseAdults() : decreaseChildren();
+                              }}
                             >
                               <Minus />
                             </Button>
@@ -266,7 +235,9 @@ const SearchBusTicket = () => {
                               size="icon-sm"
                               className="rounded-full"
                               disabled={count >= 5}
-                              onClick={() => updateCount(passengerKey.toUpperCase(), 1)}
+                              onClick={() => {
+                                passengerKey === "adult" ? increaseAdults() : increaseChildren();
+                              }}
                             >
                               <Plus />
                             </Button>
@@ -281,7 +252,7 @@ const SearchBusTicket = () => {
           </div>
 
           <Button variant="search" size="big-search" type="submit" disabled={!selectedTicket}>
-            Reservar
+            Book Now
           </Button>
         </div>
       </form>
@@ -289,4 +260,4 @@ const SearchBusTicket = () => {
   );
 };
 
-export default SearchBusTicket;
+export default SearchReservation;

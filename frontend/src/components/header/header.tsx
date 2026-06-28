@@ -74,9 +74,6 @@ const Header = () => {
                 <Link href="/login">
                   <Button variant="ghost">Iniciar Sesion</Button>
                 </Link>
-                <Link href="/register">
-                  <Button>Registrarse</Button>
-                </Link>
               </div>
             )}
           </div>

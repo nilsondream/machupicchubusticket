@@ -2,4 +2,7 @@ node_modules
 # Keep environment variables out of version control
 .env
 
-/generated/prisma
+# Keep generated files out of version control
+generated
+
+package-lock.json

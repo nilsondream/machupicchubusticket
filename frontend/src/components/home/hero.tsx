@@ -1,5 +1,5 @@
 import Icons from "@/components/ui/icons"
-import SearchBusTicket from "./search-bus-ticket"
+import SearchReservation from "./search-reservation"
 
 const Hero = () => {
   return (
@@ -21,7 +21,7 @@ const Hero = () => {
           </p>
         </div>
       </div>
-      <SearchBusTicket />
+      <SearchReservation />
     </section>
   )
 }

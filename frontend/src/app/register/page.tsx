@@ -53,14 +53,14 @@ export default function RegisterPage() {
   }
 
   return (
-    <div className="relative min-h-[calc(100vh-4.5rem)] flex items-center justify-center px-4 py-16 bg-gradient-to-br from-background via-muted/30 to-background overflow-hidden">
+    <div className="relative min-h-[calc(100vh-4.5rem)] flex items-center justify-center px-4 py-16 bg-linear-to-br from-background via-muted/30 to-background overflow-hidden">
       {/* Decorative gradient glowing spheres */}
       <div className="absolute top-1/4 left-1/4 -translate-x-1/2 -translate-y-1/2 w-72 h-72 rounded-full bg-primary/10 blur-3xl pointer-events-none" />
       <div className="absolute bottom-1/4 right-1/4 translate-x-1/2 translate-y-1/2 w-80 h-80 rounded-full bg-secondary/10 blur-3xl pointer-events-none" />
 
       <Card className="w-full max-w-md border-border/40 bg-background/60 backdrop-blur-xl shadow-2xl relative z-10 transition-all duration-300 hover:shadow-primary/5">
         <CardHeader className="space-y-2 text-center pt-8">
-          <CardTitle className="text-3xl font-bold tracking-tight bg-gradient-to-r from-primary to-foreground bg-clip-text text-transparent">
+          <CardTitle className="text-3xl font-bold tracking-tight bg-linear-to-r from-primary to-foreground bg-clip-text text-transparent">
             Crea tu cuenta
           </CardTitle>
           <CardDescription className="text-base text-muted-foreground">

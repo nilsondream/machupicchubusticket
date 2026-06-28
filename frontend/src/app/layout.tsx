@@ -2,12 +2,11 @@ import type { Metadata } from "next";
 import { Instrument_Sans } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme";
 import { cn } from "@/lib/utils";
-import Header from "@/components/header/header";
-import "./globals.css";
-import { BookingProvider } from "@/context/bus-ticket";
 import { AuthProvider } from "@/providers/auth";
 import { Toaster } from "@/components/ui/sonner";
+import Header from "@/components/header/header";
 import Footer from "@/components/footer/footer";
+import "./globals.css";
 
 const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
 
@@ -34,12 +33,10 @@ export default function RootLayout({
           disableTransitionOnChange
         >
           <AuthProvider>
-            <BookingProvider>
-              <Header />
-              {children}
-              <Footer />
-              <Toaster position="top-center" richColors />
-            </BookingProvider>
+            <Header />
+            {children}
+            <Footer />
+            <Toaster position="top-center" richColors />
           </AuthProvider>
         </ThemeProvider>
       </body>

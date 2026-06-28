@@ -10,7 +10,8 @@ export function proxy(request: NextRequest) {
   const hasSession = !!(accessToken || refreshToken)
 
   // Determinar el tipo de ruta
-  const isProtectedRoute = pathname.startsWith("/reservation")
+  //const isProtectedRoute = pathname.startsWith("/reservation")
+  const isProtectedRoute = pathname.startsWith("/reservations")
   const isAuthRoute = pathname.startsWith("/login") || pathname.startsWith("/register")
 
   if (isProtectedRoute && !hasSession) {

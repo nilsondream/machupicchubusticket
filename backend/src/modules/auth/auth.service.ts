@@ -1,4 +1,4 @@
-import { prisma } from "../../config/prisma";
+import { prisma } from "../../config/prisma.config";
 
 export class AuthService {
   static async findByEmail(email: string) {
