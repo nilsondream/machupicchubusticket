@@ -15,7 +15,7 @@ import { format, parseISO, addDays, addMonths } from "date-fns"
 import { es } from "date-fns/locale"
 import { toast } from "sonner"
 import { cn } from "@/lib/utils"
-import { BookingData } from "@/providers/bus-ticket"
+import { BookingData } from "@/context/bus-ticket"
 import { ProductFullFromApi } from "@/lib/api"
 
 type Passenger = { name: string; email: string; phone: string; ticketType: string }

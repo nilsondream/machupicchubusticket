@@ -1,115 +1,103 @@
 "use client"
 
-import {
-  createContext,
-  useCallback,
-  useContext,
-  useEffect,
-  useState,
-  ReactNode,
-} from "react"
-
+import React, { createContext, useContext, useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
+import { toast } from "sonner"
 import { api, AuthUser, RegisterPayload } from "@/lib/api"
-
-const TOKEN_KEY = "mbt_admin_token"
 
 interface AuthContextType {
   user: AuthUser | null
-  token: string | null
-  loading: boolean
-  loginModalOpen: boolean
-  openLogin: () => void
-  closeLogin: () => void
-  login: (email: string, password: string) => Promise<AuthUser>
-  register: (payload: RegisterPayload) => Promise<AuthUser>
-  logout: () => void
+  isLoading: boolean
+  login: (email: string, password: string) => Promise<void>
+  register: (payload: RegisterPayload) => Promise<void>
+  logout: () => Promise<void>
 }
 
 const AuthContext = createContext<AuthContextType | undefined>(undefined)
 
-export function AuthProvider({ children }: { children: ReactNode }) {
+export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [user, setUser] = useState<AuthUser | null>(null)
-  const [token, setToken] = useState<string | null>(null)
-  const [loading, setLoading] = useState(true)
-  const [loginModalOpen, setLoginModalOpen] = useState(false)
+  const [isLoading, setIsLoading] = useState(true)
+  const router = useRouter()
 
-  // Al montar: recupera el token persistido y valida la sesión contra /auth/me.
   useEffect(() => {
-    const stored =
-      typeof window !== "undefined" ? localStorage.getItem(TOKEN_KEY) : null
-
-    if (!stored) {
-      setLoading(false)
-      return
+    const initializeAuth = async () => {
+      try {
+        // Intenta obtener el usuario actual usando la cookie accessToken
+        const res = await api.auth.me()
+        setUser(res.user)
+      } catch (err) {
+        // Si el accessToken expiró o no existe, intenta refrescar el token
+        try {
+          const refreshRes = await api.auth.refresh()
+          setUser(refreshRes.user)
+        } catch (refreshErr) {
+          // Si el refresh token también expiró, limpiamos el estado del usuario
+          setUser(null)
+        }
+      } finally {
+        setIsLoading(false)
+      }
     }
 
-    let active = true
-    api.auth
-      .me(stored)
-      .then((me) => {
-        if (!active) return
-        setToken(stored)
-        setUser(me)
-      })
-      .catch(() => {
-        if (!active) return
-        localStorage.removeItem(TOKEN_KEY)
-      })
-      .finally(() => active && setLoading(false))
+    initializeAuth()
+  }, [])
 
-    return () => {
-      active = false
+  const login = async (email: string, password: string) => {
+    setIsLoading(true)
+    try {
+      const res = await api.auth.login(email, password)
+      setUser(res.user)
+      toast.success("¡Inicio de sesión exitoso!")
+      router.push("/")
+    } catch (err: any) {
+      toast.error(err.message || "Error al iniciar sesión")
+      throw err;
+    } finally {
+      setIsLoading(false)
     }
-  }, [])
+  }
 
-  const openLogin = useCallback(() => setLoginModalOpen(true), [])
-  const closeLogin = useCallback(() => setLoginModalOpen(false), [])
+  const register = async (payload: RegisterPayload) => {
+    setIsLoading(true)
+    try {
+      const res = await api.auth.register(payload)
+      setUser(res.user)
+      toast.success("¡Registro de usuario exitoso!")
+      router.push("/")
+    } catch (err: any) {
+      toast.error(err.message || "Error al registrarse")
+      throw err;
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
-  const login = useCallback(async (email: string, password: string) => {
-    const result = await api.auth.login(email, password)
-    localStorage.setItem(TOKEN_KEY, result.token)
-    setToken(result.token)
-    setUser(result.user)
-    return result.user
-  }, [])
-
-  const register = useCallback(async (payload: RegisterPayload) => {
-    const result = await api.auth.register(payload)
-    localStorage.setItem(TOKEN_KEY, result.token)
-    setToken(result.token)
-    setUser(result.user)
-    return result.user
-  }, [])
-
-  const logout = useCallback(() => {
-    localStorage.removeItem(TOKEN_KEY)
-    setToken(null)
-    setUser(null)
-  }, [])
+  const logout = async () => {
+    setIsLoading(true)
+    try {
+      await api.auth.logout()
+      setUser(null)
+      toast.success("Sesión cerrada correctamente")
+      router.push("/")
+    } catch (err: any) {
+      toast.error("Error al cerrar sesión")
+    } finally {
+      setIsLoading(false)
+    }
+  }
 
   return (
-    <AuthContext.Provider
-      value={{
-        user,
-        token,
-        loading,
-        loginModalOpen,
-        openLogin,
-        closeLogin,
-        login,
-        register,
-        logout,
-      }}
-    >
+    <AuthContext.Provider value={{ user, isLoading, login, register, logout }}>
       {children}
     </AuthContext.Provider>
   )
 }
 
-export function useAuth() {
+export const useAuth = () => {
   const context = useContext(AuthContext)
-  if (!context) {
-    throw new Error("useAuth must be used within AuthProvider")
+  if (context === undefined) {
+    throw new Error("useAuth debe usarse dentro de un AuthProvider")
   }
   return context
 }

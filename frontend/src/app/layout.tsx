@@ -4,7 +4,8 @@ import { ThemeProvider } from "@/providers/theme";
 import { cn } from "@/lib/utils";
 import Header from "@/components/header/header";
 import "./globals.css";
-import { BookingProvider } from "@/providers/bus-ticket";
+import { BookingProvider } from "@/context/bus-ticket";
+import { AuthProvider } from "@/providers/auth";
 import { Toaster } from "@/components/ui/sonner";
 import Footer from "@/components/footer/footer";
 
@@ -32,12 +33,14 @@ export default function RootLayout({
           enableSystem
           disableTransitionOnChange
         >
-          <BookingProvider>
-            <Header />
-            {children}
-            <Footer />
-            <Toaster position="top-center" richColors />
-          </BookingProvider>
+          <AuthProvider>
+            <BookingProvider>
+              <Header />
+              {children}
+              <Footer />
+              <Toaster position="top-center" richColors />
+            </BookingProvider>
+          </AuthProvider>
         </ThemeProvider>
       </body>
     </html>

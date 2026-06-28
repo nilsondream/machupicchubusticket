@@ -8,7 +8,7 @@ const reviews = [{ name: "Carlos Ramírez", country: "Chile", content: "Reservar
 
 const Reviews = () => {
   return (
-    <section className="py-24 max-md:py-20 bg-linear-to-b from-muted/75 dark:from-muted/50 to-transparent">
+    <section className="py-24 max-md:py-20">
       <div className="max-w-6xl mx-auto max-md:px-5">
         <div className="text-center mb-16">
           <h2 className="text-3xl font-semibold tracking-tight mb-4">

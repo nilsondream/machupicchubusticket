@@ -25,10 +25,10 @@ const Pricing = () => {
       <div className="max-w-6xl mx-auto space-y-10 max-md:p-5">
         <div className="space-y-5">
           <h2 className="text-3xl font-semibold tracking-tight">
-            Vive un viaje legendario en bus hacia Machu Picchu
+            Experience a legendary bus journey to Machu Picchu
           </h2>
           <p className="w-3/4 max-md:w-full">
-            Viaja con comodidad entre Aguas Calientes y la ciudadela de Machu Picchu. Reserva tus boletos de bus en línea y disfruta de un proceso rápido, seguro y con confirmación digital inmediata.
+            Travel in comfort between Aguas Calientes and the Machu Picchu citadel. Book your bus tickets online and enjoy a fast, secure process with immediate digital confirmation.
           </p>
         </div>
 
@@ -39,7 +39,7 @@ const Pricing = () => {
               className="bg-background border rounded-2xl p-6 space-y-3"
             >
               <div className="flex items-center justify-between">
-                <span className="text-muted-foreground text-sm font-semibold">
+                <span className="text-muted-foreground text-sm">
                   {item.title}
                 </span>
 

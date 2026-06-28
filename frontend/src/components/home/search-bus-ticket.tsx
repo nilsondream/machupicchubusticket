@@ -1,6 +1,6 @@
 "use client"
 
-import { useBooking } from "@/providers/bus-ticket"
+import { useBooking } from "@/context/bus-ticket"
 import { BusFront, Calendar, ChevronDown, Minus, Plus, UserRound } from "lucide-react"
 import { Calendar as CalendarComponent } from "@/components/ui/calendar"
 import { useRouter } from "next/navigation"

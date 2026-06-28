@@ -1,6 +1,6 @@
 "use client"
 
-import { useBooking } from "@/providers/bus-ticket"
+import { useBooking } from "@/context/bus-ticket"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
