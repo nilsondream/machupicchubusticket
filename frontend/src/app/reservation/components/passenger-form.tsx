@@ -3,30 +3,39 @@
 import { useForm, useFieldArray } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { reservationSchema, ReservationForm } from "@/lib/validations/reservation";
-import { useReservationStore } from "@/store/reservation-store";
+import { useReservationStore } from "@/store/reservation.store";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { useMemo } from "react";
-import { busTicketData } from "@/data/bus-ticket-data";
 
 export default function PassengerForm() {
-  const { passengers, travelType, nationality } = useReservationStore();
-
+  const { passengers, pricingType } = useReservationStore();
   const totalPassengers = passengers.adults + passengers.children;
+
+  const passengerManifest = [
+    ...Array.from({ length: passengers.adults }, (_, index) => ({
+      type: "adult" as const,
+      pricingType,
+      isLead: index === 0,
+    })),
+
+    ...Array.from({ length: passengers.children }, () => ({
+      type: "child" as const,
+      pricingType,
+      isLead: false,
+    })),
+  ];
+
+  const leadPassenger = passengerManifest[0];
 
   const form = useForm<ReservationForm>({
     resolver: zodResolver(reservationSchema),
-
     defaultValues: {
       email: "",
       phone: "",
-
       leadPassenger: {
         fullName: "",
-        documentType: "passport",
         document: "",
       },
-
       passengers: Array.from({
         length: totalPassengers - 1,
       }).map(() => ({
@@ -42,29 +51,20 @@ export default function PassengerForm() {
     name: "passengers",
   });
 
-  const ticket = useMemo(() => {
-    return busTicketData.find(
-      t => t.typeTravel === travelType
-    );
-  }, [travelType]);
-
   return (
     <div className="col-span-3">
       <div className="space-y-5">
-        <div className="rounded-2xl border p-5 space-y-5">
+        <div className="rounded-2xl border p-5 space-y-5 bg-card">
           <div className="flex items-center justify-between">
             <h4 className="font-semibold">
               Passenger 1
             </h4>
-            <div className="flex items-center gap-2 font-medium select-none">
-              <span className="text-xs px-2 py-1 rounded-md bg-orange-500 text-white">
+            <div className="flex items-center gap-2 font-medium select-none text-xs">
+              <span className="px-2 py-1 rounded-md bg-orange-500 text-white">
                 Principal Traveler
               </span>
-              <span className="text-xs px-2 py-1 rounded-md bg-muted">
-                Adult
-              </span>
-              <span className="text-xs px-2 py-1 rounded-md bg-muted">
-                Foreign
+              <span className="px-2 py-1 rounded-md bg-muted">
+                {leadPassenger.type === "adult" ? "Adult" : "Child"}
               </span>
             </div>
           </div>
@@ -91,18 +91,6 @@ export default function PassengerForm() {
               />
             </div>
             <div className="space-y-2">
-              <Label>Document type</Label>
-              <div className="rounded-lg h-9 border w-full pr-2 overflow-hidden text-sm dark:bg-input/30">
-                <select
-                  {...form.register("leadPassenger.documentType")}
-                  className="h-full w-full outline-none pl-2"
-                >
-                  <option value="passport" className="bg-background">Passport</option>
-                  <option value="dni" className="bg-background">DNI</option>
-                </select>
-              </div>
-            </div>
-            <div className="space-y-2 md:col-span-2">
               <Label>Document</Label>
               <Input
                 placeholder="Passport / DNI"
@@ -112,35 +100,46 @@ export default function PassengerForm() {
           </div>
         </div>
 
-        {fields.map((field, index) => (
-          <div
-            key={field.id}
-            className="rounded-2xl border p-5 space-y-4"
-          >
-            <h4 className="font-semibold mb-4">
-              Passenger {index + 2}
-              <span className="ml-2 text-sm text-muted-foreground">
-                (optional)
-              </span>
-            </h4>
-            <div className="grid gap-4 md:grid-cols-2">
-              <div className="space-y-2">
-                <Label>Full name</Label>
-                <Input
-                  placeholder={`Name of passenger ${index + 2}`}
-                  {...form.register(`passengers.${index}.fullName`)}
-                />
+        {fields.map((field, index) => {
+          const passenger = passengerManifest[index + 1];
+
+          return (
+            <div
+              key={field.id}
+              className="rounded-2xl border p-5 space-y-5 bg-card"
+            >
+              <div className="flex items-center justify-between">
+                <h4 className="font-semibold">
+                  Passenger {index + 2}
+                  <span className="ml-2 text-sm text-muted-foreground">
+                    (optional)
+                  </span>
+                </h4>
+                <div className="flex items-center gap-2 font-medium select-none">
+                  <span className="text-xs px-2 py-1 rounded-md bg-muted">
+                    {passenger.type === "adult" ? "Adult" : "Child"}
+                  </span>
+                </div>
               </div>
-              <div className="space-y-2">
-                <Label>Document</Label>
-                <Input
-                  placeholder="Passport / DNI"
-                  {...form.register(`passengers.${index}.document`)}
-                />
+              <div className="grid gap-4 md:grid-cols-2">
+                <div className="space-y-2">
+                  <Label>Full name</Label>
+                  <Input
+                    placeholder={`Name of passenger ${index + 2}`}
+                    {...form.register(`passengers.${index}.fullName`)}
+                  />
+                </div>
+                <div className="space-y-2">
+                  <Label>Document</Label>
+                  <Input
+                    placeholder="Passport / DNI"
+                    {...form.register(`passengers.${index}.document`)}
+                  />
+                </div>
               </div>
             </div>
-          </div>
-        ))}
+          )
+        })}
       </div>
     </div>
   );

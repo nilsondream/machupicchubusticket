@@ -2,14 +2,12 @@ import { create } from "zustand";
 import { persist } from "zustand/middleware";
 
 export type TravelType = "roundtrip" | "oneway-go" | "oneway-return";
-
-export type Nationality = "foreign" | "national";
-
+export type PricingType = "foreign" | "national";
 
 const initialState = {
     travelType: null as TravelType | null,
     travelDate: null as string | null,
-    nationality: "foreign" as Nationality,
+    pricingType: "foreign" as PricingType,
 
     passengers: {
         adults: 1,
@@ -25,7 +23,7 @@ type ReservationStore = {
     // State
     travelType: TravelType | null;
     travelDate: string | null;
-    nationality: Nationality;
+    pricingType: PricingType;
     passengers: {
         adults: number;
         children: number;
@@ -36,7 +34,7 @@ type ReservationStore = {
     // Actions
     setTravelType: (travelType: TravelType) => void;
     setTravelDate: (date: string) => void;
-    setNationality: (nationality: Nationality) => void;
+    setPricingType: (pricingType: PricingType) => void;
     setPassengers: (passengers: { adults: number; children: number }) => void;
     setPaymentMethod: (method: "card" | "paypal" | "transfer") => void;
     setPaymentPercentage: (percentage: 100 | 50) => void;
@@ -57,7 +55,7 @@ export const useReservationStore = create<ReservationStore>()(
             // Actions
             setTravelType: (travelType) => set({ travelType }),
             setTravelDate: (travelDate) => set({ travelDate }),
-            setNationality: (nationality) => set({ nationality }),
+            setPricingType: (pricingType) => set({ pricingType }),
             setPassengers: (passengers) => set({ passengers }),
             setPaymentMethod: (paymentMethod) => set({ paymentMethod }),
             setPaymentPercentage: (paymentPercentage) => set({ paymentPercentage }),

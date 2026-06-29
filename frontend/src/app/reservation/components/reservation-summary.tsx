@@ -1,19 +1,19 @@
 "use client";
 
 import { useMemo } from "react";
-import { busTicketData } from "@/data/bus-ticket-data";
-import { useReservationStore } from "@/store/reservation-store";
+import { busTicketData } from "@/data/tickets.data";
+import { useReservationStore } from "@/store/reservation.store";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { format, parseISO } from "date-fns";
 import { enUS } from "date-fns/locale";
-import PaymentPercentage from "./payment-percentaje";
 import { ShieldCheck } from "lucide-react";
+import PaymentPercentage from "./payment-percentaje";
 
 export default function ReservationSummary() {
   const {
     travelType,
     travelDate,
-    nationality,
+    pricingType,
     passengers,
     paymentPercentage,
     paymentMethod
@@ -27,8 +27,8 @@ export default function ReservationSummary() {
 
   if (!ticket) return null;
 
-  const adultTotal = passengers.adults * ticket.prices.adult[nationality];
-  const childTotal = passengers.children * ticket.prices.child[nationality];
+  const adultTotal = passengers.adults * ticket.prices.adult[pricingType];
+  const childTotal = passengers.children * ticket.prices.child[pricingType];
   const subtotal = adultTotal + childTotal;
   const taxes = subtotal * 0.05;
   const total = subtotal + taxes;
@@ -56,7 +56,7 @@ export default function ReservationSummary() {
               <p>{passengers.adults === 1 ? "Adult" : "Adults"}</p>
               {passengers.adults !== 1 && <span>x{passengers.adults}</span>}
             </div>
-            <p><span className="text-muted-foreground">({ticket.prices.adult[nationality]} x {passengers.adults})</span> $ {adultTotal.toFixed(2)}</p>
+            <p><span className="text-muted-foreground">({ticket.prices.adult[pricingType]} x {passengers.adults})</span> ${adultTotal.toFixed(2)}</p>
           </div>
           {passengers.children !== 0 && (
             <div className="flex justify-between" >
@@ -64,7 +64,7 @@ export default function ReservationSummary() {
                 <p>{passengers.children === 1 ? "Child" : "Children"}</p>
                 {passengers.children !== 1 && <span>x{passengers.children}</span>}
               </div>
-              <p><span className="text-muted-foreground">({ticket.prices.child[nationality]} x {passengers.children})</span> $ {childTotal.toFixed(2)}</p>
+              <p><span className="text-muted-foreground">({ticket.prices.child[pricingType]} x {passengers.children})</span> ${childTotal.toFixed(2)}</p>
             </div>
           )}
         </div>
@@ -74,11 +74,11 @@ export default function ReservationSummary() {
         <div className="space-y-2">
           <div className="flex justify-between">
             <p className="text-muted-foreground">Subtotal</p>
-            <span>$ {subtotal.toFixed(2)}</span>
+            <span>${subtotal.toFixed(2)}</span>
           </div>
           <div className="flex justify-between">
             <span className="text-muted-foreground">Taxes</span>
-            <span>$ {taxes.toFixed(2)}</span>
+            <span>${taxes.toFixed(2)}</span>
           </div>
         </div>
 
@@ -86,18 +86,18 @@ export default function ReservationSummary() {
 
         <div className="flex justify-between font-bold text-lg" >
           <span>Total </span>
-          <span>$ {total.toFixed(2)}</span>
+          <span>${total.toFixed(2)}</span>
         </div>
         {paymentPercentage === 50 && (
           <div className="border rounded-xl">
             <div className="flex justify-between items-center font-semibold px-3 py-2" >
               <span>Pay now</span>
-              <span>$ {amount.toFixed(2)}</span>
+              <span>${amount.toFixed(2)}</span>
             </div>
             <hr />
             <div className="flex items-center justify-between text-muted-foreground px-3 py-2">
               <span>Pending</span>
-              <span>$ {pending.toFixed(2)}</span>
+              <span>${pending.toFixed(2)}</span>
             </div>
           </div>
         )}

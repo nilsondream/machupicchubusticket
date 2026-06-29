@@ -2,7 +2,6 @@ import { z } from "zod";
 
 export const passengerSchema = z.object({
   fullName: z.string().min(10, "Required"),
-  documentType: z.string().min(5, "Required"),
   document: z.string().min(8, "Required"),
 });
 

@@ -1,7 +1,7 @@
 "use client";
 
 import { cn } from "@/lib/utils";
-import { useReservationStore } from "@/store/reservation-store";
+import { useReservationStore } from "@/store/reservation.store";
 import { Check, CreditCard, Landmark } from "lucide-react";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import Icons from "@/components/ui/icons";
@@ -29,7 +29,7 @@ export default function PaymentMethod() {
               onClick={() => setPaymentMethod(method.id as "card" | "paypal" | "transfer")}
               className={cn(
                 "cursor-pointer px-4 py-2.5 rounded-xl border transition-all relative",
-                paymentMethod === method.id ? "border-foreground" : "hover:border-primary/50"
+                paymentMethod === method.id ? "border-primary/50 bg-input/25" : "hover:border-primary/50"
               )}
             >
               <div className="flex flex-col gap-2 items-center">
@@ -40,7 +40,7 @@ export default function PaymentMethod() {
                 </div>
               </div>
               {paymentMethod === method.id && (
-                <Check size={20} className="absolute top-0 right-0 m-2 bg-foreground text-background rounded-full p-1" />
+                <Check size={20} className="absolute top-0 right-0 m-2 bg-primary text-background rounded-full p-1" />
               )}
             </button>
           ))}

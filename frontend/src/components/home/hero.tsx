@@ -1,5 +1,5 @@
 import Icons from "@/components/ui/icons"
-import SearchReservation from "./search-reservation"
+import SearchReservation from "./search"
 
 const Hero = () => {
   return (

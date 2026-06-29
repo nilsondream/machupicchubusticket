@@ -1,12 +1,12 @@
 "use client";
 
 import { useRouter } from "next/navigation";
-import { useReservationStore } from "@/store/reservation-store";
+import { useReservationStore } from "@/store/reservation.store";
 
 import PassengerForm from "./components/passenger-form";
 import PaymentCard from "./components/payment-card";
 import { format, parseISO } from "date-fns";
-import { enUS, es } from "date-fns/locale"
+import { enUS } from "date-fns/locale"
 
 export default function ReservationPage() {
     const router = useRouter();
