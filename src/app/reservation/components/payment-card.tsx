@@ -7,10 +7,14 @@ import { useState } from "react";
 import { useReservationStore } from "@/store/reservation.store";
 
 export default function PaymentCard() {
-  const { paymentMethod, paymentAmountType } = useReservationStore();
+  const paymentMethod = useReservationStore((s) => s.paymentMethod);
+  const paymentAmountType = useReservationStore((s) => s.paymentAmountType);
+  const passengers = useReservationStore((s) => s.passengers);
   const [isModalOpen, setIsModalOpen] = useState(false);
 
-  const canProceed = paymentMethod !== "none" && paymentAmountType !== "none";
+  const primary = passengers.find((p) => p.isPrimary);
+  const primaryValid = !!(primary?.fullName?.trim() && primary?.documentNumber?.trim() && primary?.email?.trim());
+  const canProceed = paymentMethod !== "none" && paymentAmountType !== "none" && primaryValid;
 
   const handleOpenModal = () => {
     if (canProceed) {

@@ -4,8 +4,6 @@ export type PaymentAmountType = "total" | "half" | "none";
 export type TripType = "round_trip" | "one_way" | "return_only";
 
 // Tarifa base por tipo de viaje y tipo de pasajero (ajustar según tus tarifas reales).
-// "one_way" y "return_only" son ambos tramos simples, pero los dejo separados por si
-// manejas precios distintos para cada uno (ej. promociones de retorno).
 export const PASSENGER_PRICING: Record<TripType, Record<PassengerType, number>> = {
   round_trip: { adult: 34, child: 18 },     // ida + vuelta
   one_way: { adult: 19, child: 13 },        // solo ida

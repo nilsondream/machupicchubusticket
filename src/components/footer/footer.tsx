@@ -1,6 +1,6 @@
 import Link from "next/link"
-import Icons from "../ui/icons"
-import { Button } from "../ui/button"
+import Icons from "@/components/ui/icons"
+import { Button } from "@/components/ui/button"
 
 const Footer = () => {
   return (
@@ -11,33 +11,34 @@ const Footer = () => {
             <Link href={"/"} className="w-fit flex items-center gap-5 font-semibold text-2xl">
               machupicchubusticket.com
             </Link>
-            <p className="leading-relaxed mt-5">
-              Reserva tus boletos de bus a Machu Picchu de forma rápida y segura.
+            <p className="leading-relaxed mt-5 text-sm">
+              Book your bus tickets to Machu Picchu quickly and securely.
             </p>
           </div>
 
-          <div>
-            <h3 className="font-semibold text-lg mb-6">Nuestros Servicios</h3>
-            <ul className="space-y-2">
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Reserva tu Bus</Link></li>
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Bus de Ida</Link></li>
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Bus de Subida</Link></li>
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Venta</Link></li>
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Alquiler</Link></li>
+          <div className="text-sm">
+            <h3 className="font-semibold mb-6">Our Services</h3>
+            <ul className="space-y-2 [&_a]:hover:text-orange-500">
+              <li><Link href="#">Book Your Bus Ticket</Link></li>
+              <li><Link href="#">Search Ticket</Link></li>
+              <li><Link href="#">One-Way Ticket</Link></li>
+              <li><Link href="#">Uphill Bus</Link></li>
+              <li><Link href="#">Sales</Link></li>
+              <li><Link href="#">Rentals</Link></li>
             </ul>
           </div>
 
-          <div className="max-md:mr-10">
-            <h3 className="font-semibold text-lg mb-6">Empresa</h3>
-            <ul className="space-y-2">
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Sobre Nosotros</Link></li>
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Contacto</Link></li>
-              <li><Link href="#" className="hover:text-orange-500 transition-colors">Blog</Link></li>
+          <div className="max-md:mr-10 text-sm">
+            <h3 className="font-semibold mb-6">Company</h3>
+            <ul className="space-y-2 [&_a]:hover:text-orange-500">
+              <li><Link href="#">About Us</Link></li>
+              <li><Link href="#">Contact</Link></li>
+              <li><Link href="#">Blog</Link></li>
             </ul>
           </div>
 
-          <div>
-            <h3 className="font-semibold text-lg mb-6">Síguenos</h3>
+          <div className="text-sm">
+            <h3 className="font-semibold mb-6">Follow Us</h3>
             <div className="flex gap-2">
               <Button size={"icon"} variant={"hero-outline"}>
                 <Icons.Facebok />
@@ -55,12 +56,12 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/25 flex flex-col md:flex-row justify-between items-center gap-4">
-          <p>&copy; {new Date().getFullYear()} Machu Picchu Bus Ticket. Todos los derechos reservados.</p>
-          <div className="flex gap-8 max-md:inline-block max-md:space-x-5">
-            <Link href="#" className="hover:text-orange-500 transition-colors">Términos y Condiciones</Link>
-            <Link href="#" className="hover:text-orange-500 transition-colors">Política de Privacidad</Link>
-            <Link href="#" className="hover:text-orange-500 transition-colors">Información Legal</Link>
+        <div className="pt-8 border-t border-white/25 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+          <p>&copy; {new Date().getFullYear()} Machu Picchu Bus Ticket. All rights reserved.</p>
+          <div className="flex gap-8 max-md:inline-block max-md:space-x-5 [&_a]:hover:text-orange-500">
+            <Link href="#">Terms and Conditions</Link>
+            <Link href="#">Privacy Policy</Link>
+            <Link href="#">Legal Information</Link>
           </div>
         </div>
       </div>

@@ -22,7 +22,7 @@ const prices = [
 const Pricing = () => {
   return (
     <section className="bg-muted pt-36 pb-24 dark:bg-muted/50">
-      <div className="max-w-6xl mx-auto space-y-10 max-md:p-5">
+      <div className="max-w-6xl mx-auto space-y-10 max-md:px-5">
         <div className="space-y-5">
           <h2 className="text-3xl font-semibold tracking-tight max-md:mt-10">
             Experience a legendary bus journey to Machu Picchu

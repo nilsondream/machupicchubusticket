@@ -34,10 +34,10 @@ const TravelType = ({ edit }: { edit?: boolean }) => {
             edit ? "bg-muted dark:bg-card" : "bg-muted dark:bg-background/50" :
             edit ? "bg-card hover:border-primary/50" : "hover:bg-muted dark:hover:bg-background/50"
           ,
-          edit ? "rounded-2xl border p-4 max-md:py-2 max-md:px-3 gap-1" : "py-3 px-8 rounded-full max-md:rounded-2xl gap-2"
+          edit ? "rounded-2xl border p-4 gap-1 max-md:py-2 max-md:px-3" : "py-3 px-8 max-md:px-3 max-md:py-2 rounded-full max-md:rounded-2xl gap-2 max-md:gap-1"
         )}
       >
-        <p className="text-muted-foreground text-sm max-md:text-xs mt-1">
+        <p className="text-muted-foreground text-sm">
           Trip type
         </p>
         <div className="cursor-pointer w-full font-semibold flex items-center justify-between">

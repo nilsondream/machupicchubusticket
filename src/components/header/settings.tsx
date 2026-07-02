@@ -40,44 +40,35 @@ const Settings = () => {
       </Button>
 
       {openSettings && (
-        <div className="absolute z-50 p-2 border shadow-lg mt-2 rounded-3xl w-80 max-md:w-64 right-0 bg-popover text-foreground animate-in fade-in-50 slide-in-from-top-1">
+        <div className="absolute z-50 p-1.5 border shadow-lg mt-2 rounded-2xl w-60 max-md:w-64 right-0 bg-popover text-foreground animate-in fade-in-50 slide-in-from-top-1">
           {panel === "main" && (
-            <>
-              <span className="font-semibold text-xs text-muted-foreground px-3 py-2">
-                Settings
-              </span>
-              <div className="space-y-1.5 mt-2">
-                <button
-                  onClick={() => setPanel("currency")}
-                  className="flex items-center justify-between w-full px-3 py-2 hover:bg-muted rounded-xl cursor-not-allowed opacity-50"
-                  disabled
-                >
-                  <div className="flex items-center gap-2 font-bold">
-                    <Coins size={20} />
-                    Currency
-                  </div>
-                  <div className="flex items-center text-muted-foreground">
-                    USD
-                    <ChevronRight size={20} />
-                  </div>
-                </button>
-                <button
-                  onClick={() => setPanel("language")}
-                  className="flex items-center justify-between w-full px-3 py-2 hover:bg-muted rounded-xl cursor-not-allowed opacity-50"
-                  disabled
-                >
-                  <div className="flex items-center gap-2 font-semibold">
-                    <Globe size={20} />
-                    Language
-                  </div>
-                  <div className="flex items-center text-muted-foreground">
-                    English
-                    <ChevronRight size={20} />
-                  </div>
-                </button>
-                <ButtonTheme />
-              </div>
-            </>
+            <div className="space-y-1">
+              <button
+                onClick={() => setPanel("currency")}
+                className="flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all opacity-50"
+                disabled
+              >
+                <span>                  Currency                </span>
+                <div className="flex items-center text-muted-foreground">
+                  USD
+                  <ChevronRight size={20} />
+                </div>
+              </button>
+              <hr />
+              <button
+                onClick={() => setPanel("language")}
+                className="flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all opacity-50"
+                disabled
+              >
+                <span>Language</span>
+                <div className="flex items-center text-muted-foreground">
+                  English
+                  <ChevronRight size={20} />
+                </div>
+              </button>
+              <hr />
+              <ButtonTheme />
+            </div>
           )}
         </div>
       )}

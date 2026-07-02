@@ -34,7 +34,7 @@ const SearchReservation = () => {
   return (
     <div className="-mt-14 absolute z-20 w-full max-md:px-4 max-md:-mt-37">
       <form onSubmit={handleContinue}>
-        <div className="bg-background dark:bg-muted rounded-full max-md:rounded-3xl p-4 shadow-2xl max-md:shadow-xl max-w-6xl mx-auto flex max-md:flex-col items-center gap-4 max-md:p-2">
+        <div className="bg-background dark:bg-muted rounded-full max-md:rounded-3xl p-4 shadow-xl max-md:shadow-lg max-w-6xl mx-auto flex max-md:flex-col items-center gap-4 max-md:p-2">
           <div className="grid grid-cols-3 items-center gap-4 max-md:gap-0 w-full max-md:grid-cols-1">
             <TravelType />
             <TravelDate />

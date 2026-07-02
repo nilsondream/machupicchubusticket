@@ -6,14 +6,12 @@ const ButtonTheme = () => {
 
   return (
     <button
-      className="flex items-center justify-between w-full px-3 py-2 hover:bg-muted rounded-xl cursor-pointer"
+      className="cursor-pointer flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all"
       onClick={() => setTheme(theme === "light" ? "dark" : "light")}
     >
-      <div className="flex items-center gap-2 font-semibold">
-        <span className="hidden dark:block"><Sun size={20} /></span>
-        <span className="block dark:hidden"><Moon size={20} /></span>
+      <span>
         Theme
-      </div>
+      </span>
       <div className="flex items-center text-muted-foreground">
         <span className="hidden dark:block">Light</span>
         <span className="block dark:hidden">Dark</span>

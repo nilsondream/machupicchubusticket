@@ -16,6 +16,9 @@ export interface PassengerDetail {
     id: string;
     type: PassengerType;
     fullName: string;
+    email: string;
+    phone: string;
+    notes: string;
     documentType: string;
     documentNumber: string;
     isPrimary: boolean;
@@ -28,6 +31,9 @@ function createPassenger(type: PassengerType, isPrimary: boolean = false): Passe
         id: crypto.randomUUID(),
         type,
         fullName: "",
+        email: "",
+        phone: "",
+        notes: "",
         documentType: "Passport",
         documentNumber: "",
         isPrimary,
@@ -36,7 +42,7 @@ function createPassenger(type: PassengerType, isPrimary: boolean = false): Passe
 
 interface ReservationStore {
     tripType: TripType;
-    departureDate: string | null; // ISO yyyy-mm-dd (viene de <input type="date">)
+    departureDate: string | null;
     returnDate: string | null;
 
     passengers: PassengerDetail[];
@@ -52,7 +58,7 @@ interface ReservationStore {
     decrementPassenger: (type: PassengerType) => void;
     updatePassengerField: (
         id: string,
-        field: "fullName" | "documentType" | "documentNumber",
+        field: "fullName" | "email" | "phone" | "notes" | "documentType" | "documentNumber",
         value: string
     ) => void;
     setPaymentMethod: (method: PaymentMethod) => void;
@@ -74,9 +80,9 @@ export const useReservationStore = create<ReservationStore>()(
             tripType: "round_trip",
             departureDate: null,
             returnDate: null,
-            passengers: [createPassenger("adult", true)], // arranca con 1 adulto obligatorio y principal
-            paymentMethod: "none", // ningún método de pago seleccionado al inicio
-            paymentAmountType: "none", // ningún porcentaje de pago seleccionado al inicio
+            passengers: [createPassenger("adult", true)],
+            paymentMethod: "none",
+            paymentAmountType: "none",
 
             setTripType: (type) => set({ tripType: type }),
             setDepartureDate: (date) => set({ departureDate: date }),
@@ -90,7 +96,7 @@ export const useReservationStore = create<ReservationStore>()(
             decrementPassenger: (type) =>
                 set((state) => {
                     const ofType = state.passengers.filter((p) => p.type === type);
-                    if (type === "adult" && ofType.length <= MIN_ADULTS) return state; // mínimo 1 adulto
+                    if (type === "adult" && ofType.length <= MIN_ADULTS) return state;
                     if (ofType.length === 0) return state;
                     const lastIndex = state.passengers.lastIndexOf(ofType[ofType.length - 1]);
                     const next = [...state.passengers];
@@ -112,15 +118,15 @@ export const useReservationStore = create<ReservationStore>()(
                     departureDate: null,
                     returnDate: null,
                     passengers: [createPassenger("adult", true)],
-                    paymentMethod: "none", // ningún método de pago seleccionado al inicio
-                    paymentAmountType: "none", // ningún porcentaje de pago seleccionado al inicio
+                    paymentMethod: "none",
+                    paymentAmountType: "none",
                 }),
 
             getCountByType: (type) => get().passengers.filter((p) => p.type === type).length,
             getTotalPassengers: () => get().passengers.length,
             getSubtotal: () => calculateSubtotal(get().tripType, get().passengers.map((p) => p.type)),
             getAmountBase: () => calculateAmountBase(get().getSubtotal(), get().paymentAmountType),
-            getCommission: () => calculateCommission(get().getSubtotal(), get().paymentMethod), // Comisión sobre el subtotal completo, no sobre amountBase
+            getCommission: () => calculateCommission(get().getSubtotal(), get().paymentMethod),
             getTotalToPay: () => {
                 const amountBase = get().getAmountBase();
                 const commission = get().getCommission();
@@ -132,11 +138,6 @@ export const useReservationStore = create<ReservationStore>()(
         }),
         {
             name: "reservation-store",
-            /*partialize: (state) => ({
-                selectedTravelType: state.tripType,
-                selectedDateOutbound: state.departureDate,
-                passengers: state.passengers,
-            }),*/
         }
     )
 );

@@ -105,11 +105,11 @@ export default function ReservationSummary({ openModal, proceed }: { openModal: 
           <button
             onClick={openModal}
             disabled={!proceed}
-            className="w-full bg-foreground text-background cursor-pointer rounded-xl py-3 font-semibold hover:bg-orange-500 hover:text-white"
+            className="w-full bg-foreground text-background cursor-pointer rounded-xl py-3 font-semibold hover:bg-orange-500 hover:text-white disabled:opacity-50 disabled:pointer-events-none disabled:select-none"
           >
             Confirm and pay (${totalToPay.toFixed(2)})
           </button>
-          <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground [&_a]:underline [&_a]:hover:text-orange-500">
+          <div className="flex items-center justify-center gap-1 text-xs text-muted-foreground [&_a]:text-foreground [&_a]:hover:underline [&_a]:hover:text-orange-500">
             <ShieldCheck size={14} />
             <p>By continuing you accept <Link href={"/terms"}>Terms</Link> and <Link href={"/privacy"}>Privacy Policy</Link></p>
           </div>

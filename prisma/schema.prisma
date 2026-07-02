@@ -42,7 +42,7 @@ enum PaymentStatus {
 }
 
 model Reservation {
-  id               String            @id @default(cuid())
+  id               String            @id
   tripType         TripType
   departureDate    DateTime?
   returnDate       DateTime?
@@ -52,6 +52,9 @@ model Reservation {
   commissionAmount Decimal           @db.Decimal(10, 2)
   amountPaid       Decimal           @db.Decimal(10, 2)
   paymentType      PaymentAmountType
+
+  userId           String?
+  user             User?             @relation(fields: [userId], references: [id])
 
   passengers       Passenger[]
   payment          Payment?
@@ -66,9 +69,23 @@ model Passenger {
   reservation    Reservation   @relation(fields: [reservationId], references: [id])
   type           PassengerType
   fullName       String
+  email          String?
+  phone          String?
+  notes          String?
   documentType   String
   documentNumber String
   isPrimary      Boolean       @default(false)
+}
+
+model User {
+  id           String        @id @default(cuid())
+  name         String
+  email        String        @unique
+  password     String
+  role         String        @default("user")
+  reservations Reservation[]
+  createdAt    DateTime      @default(now())
+  updatedAt    DateTime      @updatedAt
 }
 
 model Payment {

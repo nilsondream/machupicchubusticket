@@ -43,6 +43,9 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     passengers: passengers.map((p) => ({
       type: p.type,
       fullName: p.fullName,
+      email: p.email,
+      phone: p.phone,
+      notes: p.notes,
       documentType: p.documentType,
       documentNumber: p.documentNumber,
       isPrimary: p.isPrimary,
@@ -54,11 +57,11 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
     amountPaid: total,
   };
 
-  const handleSuccess = () => {
+  const handleSuccess = (reservationId?: string) => {
     resetForm();
     toast.success("Payment successful! Your reservation is confirmed.");
     onClose();
-    router.push("/");
+    router.push(`/reservation/ticket?id=${reservationId}`);
   };
 
   const renderPayPalButton = () => (
@@ -83,7 +86,8 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
           const err = await res.json();
           throw new Error(err.error || "Failed to capture payment");
         }
-        handleSuccess();
+        const { reservation } = await res.json();
+        handleSuccess(reservation.id);
       }}
       onError={(err) => {
         console.error("PayPal error:", err);
@@ -153,26 +157,28 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
           </div>
 
           <div className="space-y-6">
-            <div className={cn("grid gap-3", paymentAmountType === "half" ? "grid-cols-4 max-md:grid-cols-2" : "grid-cols-3")}>
-              <div className="rounded-2xl border p-4 dark:bg-background/50">
-                <p className="text-sm text-muted-foreground">Subtotal</p>
-                <p className="font-medium">${subtotal.toFixed(2)}</p>
-              </div>
-              <div className="rounded-2xl border p-4 dark:bg-background/50">
-                <p className="text-sm text-muted-foreground">Commission</p>
-                <p className="font-medium">${commission.toFixed(2)}</p>
-              </div>
-              <div className="rounded-2xl border p-4 dark:bg-background/50">
-                <p className="text-sm text-muted-foreground">Total to pay</p>
-                <p className="font-medium">${total.toFixed(2)}</p>
-              </div>
-              {paymentAmountType === "half" && (
-                <div className="rounded-2xl border p-4 dark:bg-background/50 relative">
-                  <p className="text-sm text-muted-foreground flex gap-1">Pending</p>
-                  <p className="font-medium">${(total).toFixed(2)}</p>
-                  <span className="absolute top-0 right-0 m-3 size-2 animate-pulse rounded-full bg-orange-600 block"></span>
+            <div className="rounded-2xl border p-5">
+              <div className={cn("grid gap-3", paymentAmountType === "half" ? "grid-cols-4 max-md:grid-cols-2" : "grid-cols-3")}>
+                <div>
+                  <p className="text-sm text-muted-foreground">Subtotal</p>
+                  <p className="font-medium">${subtotal.toFixed(2)}</p>
                 </div>
-              )}
+                <div>
+                  <p className="text-sm text-muted-foreground">Commission</p>
+                  <p className="font-medium">${commission.toFixed(2)}</p>
+                </div>
+                <div>
+                  <p className="text-sm text-muted-foreground">Total to pay</p>
+                  <p className="font-medium">${total.toFixed(2)}</p>
+                </div>
+                {paymentAmountType === "half" && (
+                  <div className="rounded-2xl border p-4 dark:bg-background/50 relative">
+                    <p className="text-sm text-muted-foreground flex gap-1">Pending</p>
+                    <p className="font-medium">${(total).toFixed(2)}</p>
+                    <span className="absolute top-0 right-0 m-3 size-2 animate-pulse rounded-full bg-orange-600 block"></span>
+                  </div>
+                )}
+              </div>
             </div>
 
             <div className="border rounded-2xl p-5">

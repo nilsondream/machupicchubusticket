@@ -1,9 +1,10 @@
 "use client"
 
-import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
-import { Card, CardContent } from "@/components/ui/card"
+import { useEffect, useState } from "react"
 import { Star } from "lucide-react"
-import { Carousel, CarouselContent, CarouselItem } from "@/components/ui/carousel"
+import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar"
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel"
+import { Card, CardContent } from "@/components/ui/card"
 
 const reviews = [
   {
@@ -45,6 +46,17 @@ const reviews = [
 ]
 
 const Reviews = () => {
+  const [api, setApi] = useState<CarouselApi>();
+  const [current, setCurrent] = useState(0);
+  const [count, setCount] = useState(0);
+
+  useEffect(() => {
+    if (!api) return;
+    setCount(api.scrollSnapList().length);
+    setCurrent(api.selectedScrollSnap() + 1);
+    api.on("select", () => { setCurrent(api.selectedScrollSnap() + 1); });
+  }, [api]);
+
   return (
     <section className="py-24 max-md:py-20">
       <div className="max-w-6xl mx-auto max-md:px-5">
@@ -57,7 +69,7 @@ const Reviews = () => {
           </p>
         </div>
 
-        <Carousel>
+        <Carousel setApi={setApi}>
           <CarouselContent>
             {reviews.map((testimonial, index) => (
               <CarouselItem key={index} className="basis-1/3 max-md:basis-full">
@@ -86,6 +98,19 @@ const Reviews = () => {
               </CarouselItem>
             ))}
           </CarouselContent>
+          <div className="flex justify-center gap-2 mt-10">
+            {Array.from({ length: count }).map((_, index) => (
+              <button
+                key={index}
+                onClick={() => api?.scrollTo(index)}
+                className={`rounded-full transition-all duration-300 ${current === index + 1
+                  ? "h-2 w-6 bg-foreground"
+                  : "h-2 w-2 bg-ring hover:bg-muted-foreground/50"
+                  }`}
+                aria-label={`Go to slide ${index + 1}`}
+              />
+            ))}
+          </div>
         </Carousel>
       </div>
     </section>
