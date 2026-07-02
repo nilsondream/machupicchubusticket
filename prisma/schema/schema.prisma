@@ -1,0 +1,84 @@
+generator client {
+  provider = "prisma-client"
+  output   = "../../src/generated/prisma"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+enum TripType {
+  round_trip
+  one_way
+  return_only
+}
+
+enum ReservationStatus {
+  confirmed
+  cancelled
+}
+
+enum PassengerType {
+  adult
+  child
+}
+
+enum PaymentAmountType {
+  total
+  half
+}
+
+enum PaymentMethod {
+  paypal
+  card
+  transfer
+}
+
+enum PaymentStatus {
+  pending
+  processing
+  completed
+  failed
+}
+
+model Reservation {
+  id               String            @id @default(cuid())
+  tripType         TripType
+  departureDate    DateTime?
+  returnDate       DateTime?
+  status           ReservationStatus @default(confirmed)
+
+  subtotal         Decimal           @db.Decimal(10, 2)
+  commissionAmount Decimal           @db.Decimal(10, 2)
+  amountPaid       Decimal           @db.Decimal(10, 2)
+  paymentType      PaymentAmountType
+
+  passengers       Passenger[]
+  payment          Payment?
+
+  createdAt        DateTime          @default(now())
+  updatedAt        DateTime          @updatedAt
+}
+
+model Passenger {
+  id             String        @id @default(cuid())
+  reservationId  String
+  reservation    Reservation   @relation(fields: [reservationId], references: [id])
+  type           PassengerType
+  fullName       String
+  documentType   String
+  documentNumber String
+  isPrimary      Boolean       @default(false)
+}
+
+model Payment {
+  id            String        @id @default(cuid())
+  reservationId String?       @unique
+  reservation   Reservation?  @relation(fields: [reservationId], references: [id])
+  method        PaymentMethod
+  amount        Decimal       @db.Decimal(10, 2)
+  status        PaymentStatus @default(pending)
+  externalId    String?
+  createdAt     DateTime      @default(now())
+  updatedAt     DateTime      @updatedAt
+}
