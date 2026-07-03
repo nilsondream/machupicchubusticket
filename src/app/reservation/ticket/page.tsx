@@ -13,8 +13,7 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Pencil, Loader2, Check, X } from "lucide-react";
-import Link from "next/link";
+import { Pencil, Loader2, Check, X, Search } from "lucide-react";
 import {
   COMMISSION_RATES,
 } from "@/lib/pricing";
@@ -317,20 +316,20 @@ const MyTicketPage = () => {
 
   return (
     <main>
-      <div className="max-w-6xl mx-auto max-md:px-5 py-24 space-y-5 min-h-150">
-        <div>
+      <div className="max-w-6xl mx-auto max-md:px-5 py-24 space-y-5 min-h-screen">
+        <div className="mt-10">
           <h1 className="text-3xl font-semibold">Search ticket</h1>
-          <p>Enter your ticket ID to view your reservation.</p>
+          <p className="text-muted-foreground">Enter your ticket ID to view your reservation.</p>
         </div>
 
-        <form className="flex gap-5 max-md:flex-col items-center" onSubmit={handleSearch}>
+        <form className="flex gap-3 max-md:flex-col items-center" onSubmit={handleSearch}>
           <Input
             placeholder="Enter ticket ID"
             value={searchId}
             onChange={(e) => setSearchId(e.target.value)}
           />
-          <Button type="submit" disabled={loading} className="h-10 w-30">
-            {loading && <Loader2 size={16} className="animate-spin mr-2" />}
+          <Button type="submit" disabled={loading} className="h-10 w-40">
+            {loading ? <Loader2 className="animate-spin" /> : <Search />}
             Search
           </Button>
         </form>

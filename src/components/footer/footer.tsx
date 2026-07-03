@@ -59,8 +59,8 @@ const Footer = () => {
         <div className="pt-8 border-t border-white/25 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
           <p>&copy; {new Date().getFullYear()} Machu Picchu Bus Ticket. All rights reserved.</p>
           <div className="flex gap-8 max-md:inline-block max-md:space-x-5 [&_a]:hover:text-orange-500">
-            <Link href="#">Terms and Conditions</Link>
-            <Link href="#">Privacy Policy</Link>
+            <Link href="/terms">Terms and Conditions</Link>
+            <Link href="/privacy">Privacy Policy</Link>
             <Link href="#">Legal Information</Link>
           </div>
         </div>

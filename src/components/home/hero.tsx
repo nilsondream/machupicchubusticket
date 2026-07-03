@@ -16,7 +16,7 @@ const Hero = () => {
             </span>{" "}
             in minutes.
           </h1>
-          <p className="text-xl mt-7 w-1/2 max-md:w-full max-md:text-lg">
+          <p className="text-xl mt-7 max-md:mt-4 w-1/2 max-md:w-full max-md:text-lg">
             Find and book bus tickets through a simple, secure process designed for travelers from around the world.
           </p>
         </div>

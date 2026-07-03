@@ -1,6 +1,6 @@
 const TermsPage = () => {
   return (
-    <div>TermsPage</div>
+    <div className="min-h-screen max-w-6xl mx-auto py-30">TermsPage</div>
   )
 }
 

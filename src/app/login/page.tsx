@@ -2,12 +2,13 @@
 
 import { useState } from "react"
 import { useRouter } from "next/navigation"
-import Link from "next/link"
 import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Loader2 } from "lucide-react"
+import { Label } from "@/components/ui/label"
+import Link from "next/link"
 
 const LoginPage = () => {
   const router = useRouter()
@@ -51,7 +52,7 @@ const LoginPage = () => {
               </div>
             )}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
+              <Label>Email</Label>
               <Input
                 type="email"
                 placeholder="your@email.com"
@@ -61,7 +62,7 @@ const LoginPage = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Password</label>
+              <Label>Password</Label>
               <Input
                 type="password"
                 placeholder="••••••••"

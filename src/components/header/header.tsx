@@ -3,13 +3,12 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, X, LogOut, LayoutDashboard, Ticket } from "lucide-react";
+import { Menu, X, LogOut, LayoutDashboard, Ticket, Equal } from "lucide-react";
 import SidebarMobile from "./sidebar-mobile";
 import Link from "next/link";
 import Settings from "./settings";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/auth-context";
-import { Avatar, AvatarFallback } from "../ui/avatar";
 
 const Header = () => {
   const pathname = usePathname();
@@ -33,7 +32,7 @@ const Header = () => {
       <header className={cn("fixed top-0 left-0 w-full z-50", (isActive("/") || isActive("/es")) ? (scroll || openMenuMobile) ? "bg-background text-foreground border-b" : "text-white border-b border-transparent" : "bg-background text-foreground border-b")}>
         <div className="max-w-6xl mx-auto h-18 flex items-center max-md:px-5 justify-between">
           <div className="flex items-center gap-18">
-            <Link href={"/"} className="w-fit flex items-center gap-5 font-semibold text-2xl max-md:text-lg">
+            <Link href={"/"} className="w-fit flex items-center gap-5 font-semibold text-2xl max-md:text-xl">
               machupicchubusticket.com
             </Link>
           </div>
@@ -98,7 +97,7 @@ const Header = () => {
             )}
           </div>
           <button className="hidden max-md:block" onClick={openMenu}>
-            {openMenuMobile ? <X /> : <Menu />}
+            {openMenuMobile ? <X /> : <Equal />}
           </button>
         </div>
       </header>

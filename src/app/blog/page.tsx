@@ -1,6 +1,6 @@
 const BlogPage = () => {
   return (
-    <div>BlogPage</div>
+    <div className="min-h-screen max-w-6xl mx-auto py-30">BlogPage</div>
   )
 }
 

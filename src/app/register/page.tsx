@@ -8,6 +8,7 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
 import { Loader2 } from "lucide-react"
+import { Label } from "@/components/ui/label"
 
 const RegisterPage = () => {
   const router = useRouter()
@@ -52,7 +53,7 @@ const RegisterPage = () => {
               </div>
             )}
             <div className="space-y-2">
-              <label className="text-sm font-medium">Full Name</label>
+              <Label>Full Name</Label>
               <Input
                 placeholder="John Doe"
                 value={name}
@@ -61,7 +62,7 @@ const RegisterPage = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Email</label>
+              <Label>Email</Label>
               <Input
                 type="email"
                 placeholder="your@email.com"
@@ -71,7 +72,7 @@ const RegisterPage = () => {
               />
             </div>
             <div className="space-y-2">
-              <label className="text-sm font-medium">Password</label>
+              <Label>Password</Label>
               <Input
                 type="password"
                 placeholder="At least 6 characters"

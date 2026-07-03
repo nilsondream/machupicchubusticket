@@ -5,10 +5,10 @@ import { useReservationStore } from "@/store/reservation.store";
 import { Badge } from "@/components/ui/badge";
 import { CreditCard, Landmark, Lock, X } from "lucide-react";
 import { toast } from "sonner";
-import Icons from "@/components/ui/icons";
 import { cn } from "@/lib/utils";
 import { PayPalButtons } from "@paypal/react-paypal-js";
 import { useRouter } from "next/navigation";
+import Icons from "@/components/ui/icons";
 
 interface PaymentModalProps {
   isOpen: boolean;
@@ -59,8 +59,8 @@ export default function PaymentModal({ isOpen, onClose }: PaymentModalProps) {
 
   const handleSuccess = (reservationId?: string) => {
     resetForm();
-    toast.success("Payment successful! Your reservation is confirmed.");
     onClose();
+    toast.success("Payment successful! Your reservation is confirmed.");
     router.push(`/reservation/ticket?id=${reservationId}`);
   };
 
