@@ -1,20 +1,18 @@
 import type { Metadata } from "next";
-import { Instrument_Sans } from "next/font/google";
+import { Instrument_Sans, Onest } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme";
 import { PayPalProvider } from "@/providers/paypal";
 import { AuthProvider } from "@/contexts/auth-context";
 import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
-import Header from "@/components/header/header";
-import Footer from "@/components/footer/footer";
 import "./globals.css";
 
-const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
+const instrumentSans = Onest({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Machu Picchu Bus Tickets 2026 | Book Online Fast & Secure",
   description: "Book your Machu Picchu bus tickets online quickly and safely. Official schedules, best prices, and instant confirmation. Travel from Cusco to Machu Picchu with ease.",
-  keywords: [
+  /*keywords: [
     "machu picchu bus tickets",
     "book bus to machu picchu",
     "machu picchu bus 2026",
@@ -28,7 +26,7 @@ export const metadata: Metadata = {
     description: "Book your Machu Picchu bus tickets online quickly and safely. Instant confirmation and best prices.",
     images: [
       {
-        url: "/images/machu-picchu-bus-og.jpg", // Replace with your actual image
+        url: "", // Replace with your actual image
         width: 1200,
         height: 630,
         alt: "Machu Picchu Bus Tickets",
@@ -45,7 +43,7 @@ export const metadata: Metadata = {
   robots: {
     index: true,
     follow: true,
-  },
+  },*/
 };
 
 export default function RootLayout({
@@ -67,9 +65,7 @@ export default function RootLayout({
         >
           <PayPalProvider clientId={process.env.PAYPAL_CLIENT_ID!}>
             <AuthProvider>
-              <Header />
               {children}
-              <Footer />
               <Toaster position="top-center" richColors />
             </AuthProvider>
           </PayPalProvider>

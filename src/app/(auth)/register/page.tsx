@@ -7,7 +7,7 @@ import { useAuth } from "@/contexts/auth-context"
 import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card"
-import { Loader2 } from "lucide-react"
+import { ArrowLeft, Loader2 } from "lucide-react"
 import { Label } from "@/components/ui/label"
 
 const RegisterPage = () => {
@@ -34,15 +34,22 @@ const RegisterPage = () => {
       setError(result.error)
       setLoading(false)
     } else {
-      router.push("/my-reservations")
+      router.push("/")
     }
   }
 
   return (
-    <main className="min-h-screen flex items-center justify-center px-4">
-      <Card className="w-full max-w-md">
+    <main className="min-h-screen flex items-center justify-center px-4 bg-black relative">
+      <Link href="/">
+        <Button className="absolute z-10 top-0 left-0 m-5 text-white" variant={"ghost"}>
+          <ArrowLeft />
+          Volver
+        </Button>
+      </Link>
+      <img src="https://images.unsplash.com/photo-1723134084358-20a2dc177ff1?q=80&w=2000&auto=format&fit=crop" alt="" className="absolute inset-0 h-full w-full object-cover z-0 opacity-50" />
+      <Card className="w-full max-w-md relative z-10">
         <CardHeader className="text-center">
-          <CardTitle className="text-2xl">Create Account</CardTitle>
+          <CardTitle className="font-medium">Create Account</CardTitle>
           <CardDescription>Register to manage your reservations</CardDescription>
         </CardHeader>
         <CardContent>

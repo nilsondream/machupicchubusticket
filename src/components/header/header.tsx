@@ -1,21 +1,36 @@
 "use client"
 
 import { usePathname } from "next/navigation";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { Menu, X, LogOut, LayoutDashboard, Ticket, Equal } from "lucide-react";
+import { X, LogOut, Ticket, Equal, LayoutGrid } from "lucide-react";
 import SidebarMobile from "./sidebar-mobile";
 import Link from "next/link";
 import Settings from "./settings";
 import { Button } from "../ui/button";
 import { useAuth } from "@/contexts/auth-context";
+import Icons from "../ui/icons";
 
 const Header = () => {
-  const pathname = usePathname();
   const { user, status, logout } = useAuth();
+  const pathname = usePathname();
   const isActive = (path: string): boolean => path === pathname;
   const [scroll, setScroll] = useState(false);
   const [openProfile, setOpenProfile] = useState(false);
+  const containerRef = useRef<HTMLDivElement>(null);
+
+  const toggleProfile = () => setOpenProfile((prev) => !prev);
+  const closeProfile = () => setOpenProfile(false);
+
+  useEffect(() => {
+    const handleClickOutside = (e: MouseEvent) => {
+      if (containerRef.current && !containerRef.current.contains(e.target as Node)) {
+        closeProfile();
+      }
+    };
+    document.addEventListener("mousedown", handleClickOutside);
+    return () => document.removeEventListener("mousedown", handleClickOutside);
+  }, []);
 
   useEffect(() => {
     const changeColor = () => { if (window.scrollY >= 100) { setScroll(true) } else { setScroll(false) } }
@@ -26,16 +41,14 @@ const Header = () => {
   const [openMenuMobile, setOpenMenuMobile] = useState(false);
   const openMenu = () => setOpenMenuMobile(!openMenuMobile);
 
-
   return (
     <>
       <header className={cn("fixed top-0 left-0 w-full z-50", (isActive("/") || isActive("/es")) ? (scroll || openMenuMobile) ? "bg-background text-foreground border-b" : "text-white border-b border-transparent" : "bg-background text-foreground border-b")}>
         <div className="max-w-6xl mx-auto h-18 flex items-center max-md:px-5 justify-between">
-          <div className="flex items-center gap-18">
-            <Link href={"/"} className="w-fit flex items-center gap-5 font-semibold text-2xl max-md:text-xl">
-              machupicchubusticket.com
-            </Link>
-          </div>
+          <Link href="/" className="flex items-center gap-4 font-semibold text-xl hover:text-orange-500">
+            <Icons.LogoIcon className="w-9" />
+            <p>machupicchubusticket.com</p>
+          </Link>
           <div className="flex justify-end items-center gap-3 max-md:hidden">
             <Button variant="ghost">
               <Link href={"/reservation/ticket"}>Search ticket</Link>
@@ -46,14 +59,15 @@ const Header = () => {
             <Settings />
 
             {status === "authenticated" && user ? (
-              <div className="relative">
-                <button
+              <div className="relative" ref={containerRef}>
+                <Button
+                  variant="secondary"
+                  size={"icon"}
                   onClick={() => setOpenProfile(!openProfile)}
+                  className="rounded-full"
                 >
-                  <Button variant={scroll ? "outline" : "hero-outline"} size={"icon"} className="rounded-full">
-                      {user.name?.charAt(0).toUpperCase() || "?"}
-                  </Button>
-                </button>
+                  {user.name?.charAt(0).toUpperCase() || "?"}
+                </Button>
 
                 {openProfile && (
                   <div className="absolute right-0 top-10 z-50 w-56 p-1.5 border shadow-lg rounded-2xl bg-popover text-popover-foreground animate-in fade-in-50 slide-in-from-top-1">
@@ -71,12 +85,12 @@ const Header = () => {
                     </Link>
                     {user.role === "admin" && (
                       <Link
-                        href="/admin/reservations"
+                        href="/admin"
                         onClick={() => setOpenProfile(false)}
                         className="flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all"
                       >
                         Admin Panel
-                        <LayoutDashboard className="size-4" />
+                        <LayoutGrid className="size-4" />
                       </Link>
                     )}
                     <hr className="my-1" />
@@ -102,9 +116,6 @@ const Header = () => {
         </div>
       </header>
       <SidebarMobile openMenuMobile={openMenuMobile} />
-      {openProfile && (
-        <div className="fixed inset-0 z-40" onClick={() => setOpenProfile(false)} />
-      )}
     </>
   )
 }

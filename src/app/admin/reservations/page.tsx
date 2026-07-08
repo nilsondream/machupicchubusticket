@@ -67,11 +67,11 @@ const AdminReservationsPage = () => {
   }
 
   return (
-    <main className="min-h-screen pt-24 pb-12">
-      <div className="max-w-6xl mx-auto px-4">
-        <h1 className="text-3xl font-semibold mb-8">All Reservations</h1>
+    <div>
+      <div className="p-10">
+        <h1 className="text-3xl font-semibold mb-8">Todas las reservas</h1>
         {reservations.length === 0 ? (
-          <p className="text-muted-foreground">No reservations found.</p>
+          <p className="text-muted-foreground">Sin reservas.</p>
         ) : (
           <div className="space-y-4">
             {reservations.map((r) => (
@@ -89,28 +89,28 @@ const AdminReservationsPage = () => {
                 <CardContent className="space-y-3 text-sm">
                   <div className="grid grid-cols-2 md:grid-cols-4 gap-3">
                     <div>
-                      <p className="text-muted-foreground text-xs">Trip</p>
+                      <p className="text-muted-foreground text-xs">Viaje</p>
                       <p>{TRIP_TYPE_LABELS[r.tripType as keyof typeof TRIP_TYPE_LABELS]}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">Departure</p>
+                      <p className="text-muted-foreground text-xs">Fecha de salida</p>
                       <p>{r.departureDate ? format(parseISO(r.departureDate), "MMM dd, yyyy") : "-"}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">Payment</p>
+                      <p className="text-muted-foreground text-xs">Pago</p>
                       <p>{r.payment ? PAYMENT_METHOD_LABELS[r.payment.method as keyof typeof PAYMENT_METHOD_LABELS] : "-"}</p>
                     </div>
                     <div>
-                      <p className="text-muted-foreground text-xs">Amount</p>
+                      <p className="text-muted-foreground text-xs">Monto</p>
                       <p>${parseFloat(r.amountPaid).toFixed(2)}</p>
                     </div>
                   </div>
                   <div>
-                    <p className="text-muted-foreground text-xs mb-1">User</p>
-                    <p>{r.user ? `${r.user.name} (${r.user.email})` : "Guest"}</p>
+                    <p className="text-muted-foreground text-xs mb-1">Usuario</p>
+                    <p>{r.user ? `${r.user.name} (${r.user.email})` : "Invitado"}</p>
                   </div>
                   <div>
-                    <p className="text-muted-foreground text-xs mb-1">Passengers</p>
+                    <p className="text-muted-foreground text-xs mb-1">Pasajeros: {r.passengers.length}</p>
                     <div className="flex flex-wrap gap-2">
                       {r.passengers.map((p) => (
                         <Badge key={p.id} variant="outline" className="text-xs">
@@ -120,7 +120,7 @@ const AdminReservationsPage = () => {
                     </div>
                   </div>
                   <p className="text-xs text-muted-foreground">
-                    Created: {format(parseISO(r.createdAt), "MMM dd, yyyy HH:mm")}
+                    Creado: {format(parseISO(r.createdAt), "MMM dd, yyyy HH:mm")}
                   </p>
                 </CardContent>
               </Card>
@@ -128,7 +128,7 @@ const AdminReservationsPage = () => {
           </div>
         )}
       </div>
-    </main>
+    </div>
   )
 }
 
