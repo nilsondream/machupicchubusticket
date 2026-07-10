@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import Link from "next/link"
 import Image from "next/image"
 import TiptapEditor from "@/components/editor/tiptap-editor"
+import BlogPreview from "@/components/editor/blog-preview"
 
 type BlogForm = {
   title: string
@@ -166,16 +167,17 @@ const AdminBlogEditPage = () => {
   }
 
   return (
-    <div className="p-10 max-w-3xl">
-      <Link
-        href="/admin/blogs"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
-      >
-        <ArrowLeft className="size-4" />
-        Back to articles
-      </Link>
+    <div className="grid grid-cols-2">
+      <div className="p-10">
+        <Link
+          href="/admin/blogs"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+        >
+          <ArrowLeft className="size-4" />
+          Volver a los artículos
+        </Link>
 
-      <h1 className="text-3xl font-semibold mb-8">Edit article</h1>
+        <h1 className="text-3xl font-semibold mb-8">Editar artículo</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
@@ -335,6 +337,17 @@ const AdminBlogEditPage = () => {
           </Link>
         </div>
       </form>
+      </div>
+      <div className="p-10 border-l overflow-y-auto max-h-screen sticky top-0">
+        <BlogPreview
+          title={form.title}
+          excerpt={form.excerpt}
+          content={form.content}
+          coverImage={form.coverImage}
+          author={form.author}
+          published={form.published}
+        />
+      </div>
     </div>
   )
 }

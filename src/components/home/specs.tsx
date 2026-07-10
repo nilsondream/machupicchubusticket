@@ -1,26 +1,30 @@
-import { BusFront, Clock, Headset, ShieldCheck } from "lucide-react"
+import { cn } from "@/lib/utils";
+import { BusFront, Clock, ShieldCheck } from "lucide-react"
 
 const specs = [
   {
     title: "Frequent Departures",
     icon: Clock,
     description: "Buses every 15 minutes with more than 60 daily schedules starting at 5:30 AM",
+    color: "text-blue-500"
   },
   {
     title: "Authorized Eco Buses",
     icon: ShieldCheck,
     description: "Service operated by an authorized company with modern, eco-friendly buses and official routes",
+    color: "text-green-500"
   },
   {
     title: "Scenic & Comfortable Journey",
     icon: BusFront,
     description: "Enjoy a safe and comfortable ride through breathtaking tropical landscapes",
-  },
+    color: "text-yellow-500"
+  }/*,
   {
     title: "24/7 Personal Support",
     icon: Headset,
     description: "We're always here for you — expert assistance available every day of the week",
-  },
+  },*/
 ];
 
 const Specs = () => {
@@ -37,13 +41,13 @@ const Specs = () => {
           </p>
         </div>
 
-        <div className="grid grid-cols-4 gap-5 max-md:grid-cols-1 max-md:gap-3">
+        <div className="grid grid-cols-3 gap-5 max-md:grid-cols-1 max-md:gap-3">
           {specs.map((item, index) => (
             <div
               key={index}
               className="bg-background border rounded-2xl p-5 flex flex-col gap-4"
             >
-              <item.icon className="size-8 shrink-0" />
+              <item.icon className={cn("size-8 shrink-0", item.color)} />
               <div className="flex flex-col gap-1">
                 <h3 className="font-medium">
                   {item.title}

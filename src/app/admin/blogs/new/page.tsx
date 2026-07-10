@@ -12,6 +12,7 @@ import { toast } from "sonner"
 import Link from "next/link"
 import Image from "next/image"
 import TiptapEditor from "@/components/editor/tiptap-editor"
+import BlogPreview from "@/components/editor/blog-preview"
 
 const AdminBlogNewPage = () => {
   const { user, status } = useAuth()
@@ -286,8 +287,15 @@ const AdminBlogNewPage = () => {
           </Button>
         </form>
       </div>
-      <div className="p-10 border-l">
-        <p className="text-sm text-muted-foreground">preview</p>
+      <div className="p-10 border-l overflow-y-auto max-h-screen sticky top-0">
+        <BlogPreview
+          title={form.title}
+          excerpt={form.excerpt}
+          content={form.content}
+          coverImage={form.coverImage}
+          author={form.author}
+          published={form.published}
+        />
       </div>
     </div>
   )
