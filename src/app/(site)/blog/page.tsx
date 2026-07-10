@@ -61,7 +61,7 @@ const BlogListingPage = async () => {
             >
               <article className="border rounded-2xl overflow-hidden hover:shadow-lg transition-shadow">
                 {blog.coverImage && (
-                  <div className="relative aspect-[16/9] overflow-hidden">
+                  <div className="relative aspect-video overflow-hidden">
                     <Image
                       src={blog.coverImage}
                       alt={blog.title}

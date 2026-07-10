@@ -120,6 +120,11 @@ const MyReservationsPage = () => {
                     <div>
                       <p className="text-muted-foreground text-xs">Paid</p>
                       <p>${parseFloat(r.amountPaid).toFixed(2)}</p>
+                      {r.paymentType === "half" && (
+                        <span className="inline-flex items-center px-1.5 py-0.5 rounded text-[10px] font-medium bg-orange-100 text-orange-700 dark:bg-orange-900/40 dark:text-orange-300 mt-0.5">
+                          50% paid - Pending
+                        </span>
+                      )}
                     </div>
                     <div>
                       <p className="text-muted-foreground text-xs">Passengers</p>
@@ -137,12 +142,22 @@ const MyReservationsPage = () => {
                     <p className="text-xs text-muted-foreground">
                       {format(parseISO(r.createdAt), "MMM dd, yyyy HH:mm")}
                     </p>
-                    <Link
-                      href={`/reservation/ticket?id=${r.id}`}
-                      className="text-sm font-medium text-primary underline-offset-4 hover:underline"
-                    >
-                      View details
-                    </Link>
+                    <div className="flex items-center gap-3">
+                      {r.paymentType === "half" && (
+                        <Link
+                          href={`/reservation/ticket?id=${r.id}`}
+                          className="text-sm font-medium text-orange-600 dark:text-orange-400 underline-offset-4 hover:underline"
+                        >
+                          Complete payment
+                        </Link>
+                      )}
+                      <Link
+                        href={`/reservation/ticket?id=${r.id}`}
+                        className="text-sm font-medium text-primary underline-offset-4 hover:underline"
+                      >
+                        View details
+                      </Link>
+                    </div>
                   </div>
                 </CardContent>
               </Card>

@@ -7,14 +7,17 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Loader2, ArrowLeft } from "lucide-react"
-import Link from "next/link"
+import { Loader2, ArrowLeft, Upload, X } from "lucide-react"
 import { toast } from "sonner"
+import Link from "next/link"
+import Image from "next/image"
+import TiptapEditor from "@/components/editor/tiptap-editor"
 
 const AdminBlogNewPage = () => {
   const { user, status } = useAuth()
   const router = useRouter()
   const [saving, setSaving] = useState(false)
+  const [uploadingCover, setUploadingCover] = useState(false)
   const [form, setForm] = useState({
     title: "",
     slug: "",
@@ -54,6 +57,35 @@ const AdminBlogNewPage = () => {
     }))
   }
 
+  const handleCoverUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0]
+    if (!file) return
+
+    setUploadingCover(true)
+    const formData = new FormData()
+    formData.append("file", file)
+
+    try {
+      const res = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      })
+
+      if (!res.ok) {
+        const data = await res.json()
+        throw new Error(data.error || "Upload failed")
+      }
+
+      const data = await res.json()
+      setForm((prev) => ({ ...prev, coverImage: data.url }))
+      toast.success("Cover image uploaded")
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Error uploading image")
+    } finally {
+      setUploadingCover(false)
+    }
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
@@ -79,6 +111,14 @@ const AdminBlogNewPage = () => {
     }
   }
 
+  if (status === "loading") {
+    return (
+      <div className="flex justify-center items-center min-h-screen">
+        <Loader2 className="size-8 animate-spin" />
+      </div>
+    )
+  }
+
   return (
     <div className="grid grid-cols-2">
       <div className="p-10">
@@ -87,19 +127,19 @@ const AdminBlogNewPage = () => {
           className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
         >
           <ArrowLeft className="size-4" />
-          Back to articles
+          Volver a los artículos
         </Link>
 
-        <h1 className="text-3xl font-semibold mb-8">New article</h1>
+        <h1 className="text-3xl font-semibold mb-8">Nuevo artículo</h1>
 
         <form onSubmit={handleSubmit} className="space-y-6">
           <div className="space-y-2">
-            <Label htmlFor="title">Title *</Label>
+            <Label htmlFor="title">Título *</Label>
             <Input
               id="title"
               value={form.title}
               onChange={(e) => handleTitleChange(e.target.value)}
-              placeholder="Article title"
+              placeholder="Título del artículo"
               required
             />
           </div>
@@ -117,47 +157,80 @@ const AdminBlogNewPage = () => {
 
           <div className="grid grid-cols-2 gap-4">
             <div className="space-y-2">
-              <Label htmlFor="author">Author</Label>
+              <Label htmlFor="author">Autor</Label>
               <Input
                 id="author"
                 value={form.author}
                 onChange={(e) => setForm((prev) => ({ ...prev, author: e.target.value }))}
-                placeholder="Author name"
+                placeholder="Nombre del autor"
               />
             </div>
 
             <div className="space-y-2">
-              <Label htmlFor="coverImage">Cover image URL</Label>
-              <Input
-                id="coverImage"
-                value={form.coverImage}
-                onChange={(e) => setForm((prev) => ({ ...prev, coverImage: e.target.value }))}
-                placeholder="https://..."
-              />
+              <Label>Imagen destacada</Label>
+              <div className="flex items-center gap-2">
+                <Button
+                  type="button"
+                  variant="outline"
+                  size="lg"
+                  disabled={uploadingCover}
+                  onClick={() => document.getElementById("cover-upload")?.click()}
+                >
+                  {uploadingCover ? (
+                    <Loader2 className="size-4 mr-1 animate-spin" />
+                  ) : (
+                    <Upload className="size-4 mr-1" />
+                  )}
+                  Subir imagen
+                </Button>
+                <input
+                  id="cover-upload"
+                  type="file"
+                  accept="image/*"
+                  className="hidden"
+                  onChange={handleCoverUpload}
+                />
+                {form.coverImage && (
+                  <Button
+                    type="button"
+                    variant="ghost"
+                    size="icon-lg"
+                    onClick={() => setForm((prev) => ({ ...prev, coverImage: "" }))}
+                  >
+                    <X className="size-4" />
+                  </Button>
+                )}
+              </div>
+              {form.coverImage && (
+                <div className="relative aspect-2/1 rounded-lg overflow-hidden border mt-2">
+                  <Image
+                    src={form.coverImage}
+                    alt="Cover"
+                    fill
+                    className="object-cover"
+                  />
+                </div>
+              )}
             </div>
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="excerpt">Excerpt</Label>
+            <Label htmlFor="excerpt">Extracto</Label>
             <Textarea
               id="excerpt"
               value={form.excerpt}
               onChange={(e) => setForm((prev) => ({ ...prev, excerpt: e.target.value }))}
-              placeholder="Short description for listings"
+              placeholder="Descripción breve para los anuncios"
               rows={2}
             />
           </div>
 
           <div className="space-y-2">
-            <Label htmlFor="content">Content (HTML) *</Label>
-            <Textarea
-              id="content"
-              value={form.content}
-              onChange={(e) => setForm((prev) => ({ ...prev, content: e.target.value }))}
-              placeholder="<h2>Subtitle</h2><p>Article content...</p>"
-              rows={16}
-              required
-              className="font-mono text-sm"
+            <Label>Contenido *</Label>
+            <TiptapEditor
+              content={form.content}
+              onChange={(html) => setForm((prev) => ({ ...prev, content: html }))}
+              placeholder="Start writing your article..."
             />
           </div>
 
@@ -214,7 +287,7 @@ const AdminBlogNewPage = () => {
         </form>
       </div>
       <div className="p-10 border-l">
-        preview
+        <p className="text-sm text-muted-foreground">preview</p>
       </div>
     </div>
   )

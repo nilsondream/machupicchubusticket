@@ -44,9 +44,9 @@ const SidebarAdmin = () => {
           <Link
             href={item.path}
             key={index}
-            className={cn("flex items-center gap-2.5 py-2 px-3 rounded-lg", isActive(item.path) ? "bg-foreground text-background" : "hover:bg-muted")}
+            className={cn("flex items-center gap-2.5 py-2 px-3 rounded-lg text-sm font-medium", isActive(item.path) ? "bg-foreground text-background" : "hover:bg-muted")}
           >
-            <item.icon className="size-5" />
+            <item.icon className="size-4" />
             {item.label}
           </Link>
         ))}

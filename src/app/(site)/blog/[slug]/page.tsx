@@ -3,7 +3,7 @@ import Link from "next/link"
 import { format, parseISO } from "date-fns"
 import Image from "next/image"
 import { notFound } from "next/navigation"
-import { ArrowLeft } from "lucide-react"
+import { ArrowLeft, Calendar, User } from "lucide-react"
 import type { Metadata } from "next"
 
 type Props = {
@@ -59,59 +59,68 @@ const BlogPostPage = async ({ params }: Props) => {
   }
 
   return (
-    <main className="min-h-screen max-w-3xl mx-auto px-4 py-24">
-      <Link
-        href="/blog"
-        className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-8"
-      >
-        <ArrowLeft className="size-4" />
-        Back to blog
-      </Link>
-
+    <main className="min-h-screen">
       <article>
-        {blog.coverImage && (
-          <div className="relative aspect-[2/1] rounded-2xl overflow-hidden mb-8">
-            <Image
-              src={blog.coverImage}
-              alt={blog.title}
-              fill
-              className="object-cover"
-              priority
-              sizes="(max-width: 768px) 100vw, 768px"
-            />
-          </div>
-        )}
+        <div className="h-150 mt-14 w-full relative grid place-items-center">
+          <div className="absolute z-10 grid place-items-center w-full">
+            <div className="w-6xl mx-auto mt-10 text-white">
+              <Link
+                href="/blog"
+                className="inline-flex items-center gap-2 text-sm transition-colors mb-8 hover:text-orange-500"
+              >
+                <ArrowLeft className="size-4" />
+                Back to blog
+              </Link>
 
-        <div className="flex items-center gap-3 text-sm text-muted-foreground mb-4">
-          {blog.createdAt && (
-            <time dateTime={blog.createdAt.toISOString()}>
-              {format(parseISO(blog.createdAt.toISOString()), "MMMM dd, yyyy")}
-            </time>
-          )}
-          {blog.author && (
-            <>
-              <span>·</span>
-              <span>{blog.author}</span>
-            </>
+
+              <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
+                {blog.title}
+              </h1>
+
+              {blog.excerpt && (
+                <p className="text-lg leading-relaxed">
+                  {blog.excerpt}
+                </p>
+              )}
+
+              <div className="flex items-center gap-5 text-sm mt-4">
+                <div className="flex items-center gap-2">
+                  <Calendar size={15} />
+                  {blog.createdAt && (
+                    <time dateTime={blog.createdAt.toISOString()}>
+                      {format(parseISO(blog.createdAt.toISOString()), "MMMM dd, yyyy")}
+                    </time>
+                  )}
+                </div>
+                {blog.author && (
+                  <div className="flex items-center gap-2">
+                    <User size={15} />
+                    <span>{blog.author}</span>
+                  </div>
+                )}
+              </div>
+            </div>
+          </div>
+
+          <div className="w-full h-full bg-linear-to-t from-black/75 absolute z-5"></div>
+
+          {blog.coverImage && (
+            <div className="absolute inset-0 z-0 overflow-hidden">
+              <img
+                src={blog.coverImage}
+                alt={blog.title}
+                className="object-cover w-full h-full"
+              />
+            </div>
           )}
         </div>
 
-        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-6">
-          {blog.title}
-        </h1>
-
-        {blog.excerpt && (
-          <p className="text-lg text-muted-foreground mb-8 leading-relaxed">
-            {blog.excerpt}
-          </p>
-        )}
-
-        <div
-          className="prose prose-gray dark:prose-invert max-w-none
-            prose-headings:font-bold prose-a:text-orange-500 prose-a:no-underline hover:prose-a:underline
-            prose-img:rounded-xl prose-pre:rounded-xl"
-          dangerouslySetInnerHTML={{ __html: blog.content }}
-        />
+        <div className="max-w-6xl mx-auto pb-20 pt-10">
+          <div
+            className="max-w-none [&_a]:text-orange-500 [&_a]:hover:underline [&_li]:list-disc [&_ul]:ml-5 [&_p]:mb-5 [&_h2]:text-2xl [&_h2]:mt-10 [&_p]:last:mb-0"
+            dangerouslySetInnerHTML={{ __html: blog.content }}
+          />
+        </div>
       </article>
     </main>
   )

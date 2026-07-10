@@ -50,3 +50,7 @@ src/generated/prisma
 .generated
 generated
 /src/generated/prisma
+
+
+# images
+/public/upload

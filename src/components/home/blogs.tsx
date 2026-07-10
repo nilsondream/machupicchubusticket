@@ -3,6 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { format, parseISO } from "date-fns"
 import { ArrowRight } from "lucide-react"
+import { Button } from "@/components/ui/button"
 
 const Blogs = async () => {
   let blogs: {
@@ -33,10 +34,10 @@ const Blogs = async () => {
   if (blogs.length === 0) return null
 
   return (
-    <section className="border-b py-24 bg-background">
+    <section className="border-y py-24 bg-background">
       <div className="max-w-6xl mx-auto space-y-12 max-md:px-5">
-        <div className="flex items-end justify-between">
-          <div className="space-y-4">
+        <div className="flex items-end justify-center">
+          <div className="space-y-4 text-center">
             <h2 className="text-3xl font-semibold tracking-tight">
               Latest from our blog
             </h2>
@@ -44,13 +45,6 @@ const Blogs = async () => {
               Travel tips, guides, and updates about visiting Machu Picchu.
             </p>
           </div>
-          <Link
-            href="/blog"
-            className="hidden md:inline-flex items-center gap-2 text-sm font-medium hover:text-orange-500 transition-colors"
-          >
-            View all articles
-            <ArrowRight className="size-4" />
-          </Link>
         </div>
 
         <div className="grid md:grid-cols-3 gap-6">
@@ -60,9 +54,9 @@ const Blogs = async () => {
               href={`/blog/${blog.slug}`}
               className="group block"
             >
-              <article className="border rounded-2xl overflow-hidden hover:shadow-lg transition-shadow h-full">
+              <article className="border rounded-2xl overflow-hidden transition-shadow h-full">
                 {blog.coverImage && (
-                  <div className="relative aspect-[16/9] overflow-hidden">
+                  <div className="relative aspect-video overflow-hidden">
                     <Image
                       src={blog.coverImage}
                       alt={blog.title}
@@ -90,13 +84,14 @@ const Blogs = async () => {
           ))}
         </div>
 
-        <div className="md:hidden text-center">
-          <Link
+        <div className="text-center">
+            <Link
             href="/blog"
-            className="inline-flex items-center gap-2 text-sm font-medium hover:text-orange-500 transition-colors"
-          >
+            >
+            <Button>
             View all articles
-            <ArrowRight className="size-4" />
+            <ArrowRight />
+          </Button>
           </Link>
         </div>
       </div>

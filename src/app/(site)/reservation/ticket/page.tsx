@@ -13,7 +13,8 @@ import {
   CardHeader,
   CardTitle,
 } from "@/components/ui/card";
-import { Pencil, Loader2, Check, X, Search } from "lucide-react";
+import { Pencil, Loader2, Check, X, Search, ExternalLink } from "lucide-react";
+import { PayPalButtons } from "@paypal/react-paypal-js";
 import {
   COMMISSION_RATES,
 } from "@/lib/pricing";
@@ -273,6 +274,33 @@ const MyTicketPage = () => {
     }
   };
 
+  const [isPaying, setIsPaying] = useState(false);
+  const [payingLoading, setPayingLoading] = useState(false);
+
+  const handleCompletePayment = async (orderId: string) => {
+    if (!reservation) return;
+    setPayingLoading(true);
+    try {
+      const res = await fetch(`/api/reservations/${encodeURIComponent(reservation.id)}/pay`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ orderId }),
+      });
+      if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.error || "Failed to complete payment");
+      }
+      const data = await res.json();
+      setReservation(data.reservation);
+      setIsPaying(false);
+      toast.success("Payment completed! Your reservation is now fully paid.");
+    } catch (err) {
+      toast.error(err instanceof Error ? err.message : "Payment failed");
+    } finally {
+      setPayingLoading(false);
+    }
+  };
+
   const handleSavePassenger = async (updated: Passenger): Promise<void> => {
     if (!reservation) return;
 
@@ -436,6 +464,53 @@ const MyTicketPage = () => {
                       <span>Pending</span>
                       <span className="text-base">${pendingAmount.toFixed(2)}</span>
                     </div>
+                    {!isPaying ? (
+                      <div className="px-4 pb-4">
+                        <Button
+                          className="w-full mt-3"
+                          onClick={() => setIsPaying(true)}
+                        >
+                          <ExternalLink />
+                          Complete payment (${pendingAmount.toFixed(2)})
+                        </Button>
+                      </div>
+                    ) : (
+                      <div className="px-4 pb-4 space-y-3">
+                        <p className="text-xs text-muted-foreground text-center">
+                          Pay the remaining ${pendingAmount.toFixed(2)} to complete your reservation.
+                        </p>
+                        <PayPalButtons
+                          style={{ layout: "vertical" }}
+                          createOrder={async () => {
+                            const res = await fetch("/api/payments/paypal/create-order", {
+                              method: "POST",
+                              headers: { "Content-Type": "application/json" },
+                              body: JSON.stringify({ amount: pendingAmount }),
+                            });
+                            if (!res.ok) throw new Error("Failed to create payment");
+                            const data = await res.json();
+                            return data.orderId;
+                          }}
+                          onApprove={async (data) => {
+                            await handleCompletePayment(data.orderID);
+                          }}
+                          onCancel={() => setIsPaying(false)}
+                          onError={() => {
+                            toast.error("Payment failed. Please try again.");
+                            setIsPaying(false);
+                          }}
+                        />
+                        <Button
+                          variant="outline"
+                          size="sm"
+                          className="w-full"
+                          onClick={() => setIsPaying(false)}
+                          disabled={payingLoading}
+                        >
+                          Cancel
+                        </Button>
+                      </div>
+                    )}
                   </div>
                 )}
 
