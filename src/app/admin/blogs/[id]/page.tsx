@@ -7,12 +7,11 @@ import { Button } from "@/components/ui/button"
 import { Input } from "@/components/ui/input"
 import { Textarea } from "@/components/ui/textarea"
 import { Label } from "@/components/ui/label"
-import { Loader2, ArrowLeft, Upload, X } from "lucide-react"
+import { Loader2, ArrowLeft, Upload, X, Eye } from "lucide-react"
 import { toast } from "sonner"
 import Link from "next/link"
 import Image from "next/image"
 import TiptapEditor from "@/components/editor/tiptap-editor"
-import BlogPreview from "@/components/editor/blog-preview"
 
 type BlogForm = {
   title: string
@@ -133,6 +132,21 @@ const AdminBlogEditPage = () => {
     }
   }
 
+  const handlePreview = () => {
+    sessionStorage.setItem(
+      "blog_preview",
+      JSON.stringify({
+        title: form.title,
+        excerpt: form.excerpt,
+        content: form.content,
+        coverImage: form.coverImage,
+        author: form.author,
+        published: form.published,
+      })
+    )
+    window.open("/admin/blogs/preview", "_blank")
+  }
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setSaving(true)
@@ -150,7 +164,6 @@ const AdminBlogEditPage = () => {
       }
 
       toast.success("Article updated")
-      router.push("/admin/blogs")
     } catch (err) {
       toast.error(err instanceof Error ? err.message : "Error updating article")
     } finally {
@@ -167,26 +180,32 @@ const AdminBlogEditPage = () => {
   }
 
   return (
-    <div className="grid grid-cols-2">
-      <div className="p-10">
+    <div className="p-10 max-w-3xl mx-auto">
+      <div className="flex items-center justify-between mb-6">
         <Link
           href="/admin/blogs"
-          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors mb-6"
+          className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground transition-colors"
         >
           <ArrowLeft className="size-4" />
           Volver a los artículos
         </Link>
 
-        <h1 className="text-3xl font-semibold mb-8">Editar artículo</h1>
+        <Button type="button" variant="outline" onClick={handlePreview}>
+          <Eye className="size-4 mr-2" />
+          Vista previa
+        </Button>
+      </div>
+
+      <h1 className="text-3xl font-semibold mb-8">Editar artículo</h1>
 
       <form onSubmit={handleSubmit} className="space-y-6">
         <div className="space-y-2">
-          <Label htmlFor="title">Title *</Label>
+          <Label htmlFor="title">Título *</Label>
           <Input
             id="title"
             value={form.title}
             onChange={(e) => handleTitleChange(e.target.value)}
-            placeholder="Article title"
+            placeholder="Título del artículo"
             required
           />
         </div>
@@ -204,22 +223,22 @@ const AdminBlogEditPage = () => {
 
         <div className="grid grid-cols-2 gap-4">
           <div className="space-y-2">
-            <Label htmlFor="author">Author</Label>
+            <Label htmlFor="author">Autor</Label>
             <Input
               id="author"
               value={form.author}
               onChange={(e) => setForm((prev) => ({ ...prev, author: e.target.value }))}
-              placeholder="Author name"
+              placeholder="Nombre del autor"
             />
           </div>
 
           <div className="space-y-2">
-            <Label>Cover image</Label>
+            <Label>Imagen destacada</Label>
             <div className="flex items-center gap-2">
               <Button
                 type="button"
                 variant="outline"
-                size="sm"
+                size="lg"
                 disabled={uploadingCover}
                 onClick={() => document.getElementById("cover-upload")?.click()}
               >
@@ -228,7 +247,7 @@ const AdminBlogEditPage = () => {
                 ) : (
                   <Upload className="size-4 mr-1" />
                 )}
-                Upload
+                Subir imagen
               </Button>
               <input
                 id="cover-upload"
@@ -241,7 +260,7 @@ const AdminBlogEditPage = () => {
                 <Button
                   type="button"
                   variant="ghost"
-                  size="sm"
+                  size="icon-lg"
                   onClick={() => setForm((prev) => ({ ...prev, coverImage: "" }))}
                 >
                   <X className="size-4" />
@@ -262,18 +281,18 @@ const AdminBlogEditPage = () => {
         </div>
 
         <div className="space-y-2">
-          <Label htmlFor="excerpt">Excerpt</Label>
+          <Label htmlFor="excerpt">Extracto</Label>
           <Textarea
             id="excerpt"
             value={form.excerpt}
             onChange={(e) => setForm((prev) => ({ ...prev, excerpt: e.target.value }))}
-            placeholder="Short description for listings"
+            placeholder="Descripción breve para los anuncios"
             rows={2}
           />
         </div>
 
         <div className="space-y-2">
-          <Label>Content *</Label>
+          <Label>Contenido *</Label>
           <TiptapEditor
             content={form.content}
             onChange={(html) => setForm((prev) => ({ ...prev, content: html }))}
@@ -289,7 +308,7 @@ const AdminBlogEditPage = () => {
             onChange={(e) => setForm((prev) => ({ ...prev, published: e.target.checked }))}
             className="size-4"
           />
-          <Label htmlFor="published" className="mb-0">Published</Label>
+          <Label htmlFor="published" className="mb-0">Publicado</Label>
         </div>
 
         <hr />
@@ -330,24 +349,17 @@ const AdminBlogEditPage = () => {
         <div className="flex gap-3">
           <Button type="submit" disabled={saving}>
             {saving && <Loader2 className="size-4 mr-2 animate-spin" />}
-            Save changes
+            Guardar cambios
+          </Button>
+          <Button type="button" variant="outline" onClick={handlePreview}>
+            <Eye className="size-4 mr-2" />
+            Vista previa
           </Button>
           <Link href="/admin/blogs">
-            <Button variant="outline" type="button">Cancel</Button>
+            <Button variant="outline" type="button">Cancelar</Button>
           </Link>
         </div>
       </form>
-      </div>
-      <div className="p-10 border-l overflow-y-auto max-h-screen sticky top-0">
-        <BlogPreview
-          title={form.title}
-          excerpt={form.excerpt}
-          content={form.content}
-          coverImage={form.coverImage}
-          author={form.author}
-          published={form.published}
-        />
-      </div>
     </div>
   )
 }

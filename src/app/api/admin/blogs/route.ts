@@ -30,8 +30,8 @@ export async function POST(request: Request) {
     const body = await request.json()
     const { title, slug, excerpt, content, coverImage, author, published, seoTitle, seoDescription, seoKeywords } = body
 
-    if (!title || !slug || !content) {
-      return NextResponse.json({ error: "Title, slug and content are required" }, { status: 400 })
+    if (!title || !slug) {
+      return NextResponse.json({ error: "Title and slug are required" }, { status: 400 })
     }
 
     const existing = await prisma.blog.findUnique({ where: { slug } })

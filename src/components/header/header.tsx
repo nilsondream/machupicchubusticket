@@ -75,7 +75,8 @@ const Header = () => {
                       <p className="text-sm font-medium truncate">{user.name}</p>
                       <p className="text-xs text-muted-foreground truncate">{user.email}</p>
                     </div>
-                    <Link
+                    {user.role === "user" && (
+                      <Link
                       href="/my-reservations"
                       onClick={() => setOpenProfile(false)}
                       className="flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all"
@@ -83,6 +84,7 @@ const Header = () => {
                       My Reservations
                       <Ticket className="size-4" />
                     </Link>
+                    )}
                     {user.role === "admin" && (
                       <Link
                         href="/admin"

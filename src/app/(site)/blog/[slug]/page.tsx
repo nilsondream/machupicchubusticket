@@ -118,7 +118,7 @@ const BlogPostPage = async ({ params }: Props) => {
         <div className="max-w-6xl mx-auto pb-20 pt-10">
           <div
             className="max-w-none [&_a]:text-orange-500 [&_a]:hover:underline [&_li]:list-disc [&_ul]:ml-5 [&_p]:mb-5 [&_h2]:text-2xl [&_h2]:mt-10 [&_p]:last:mb-0"
-            dangerouslySetInnerHTML={{ __html: blog.content }}
+            dangerouslySetInnerHTML={{ __html: blog.content || "" }}
           />
         </div>
       </article>
