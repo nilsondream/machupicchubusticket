@@ -1,76 +1,101 @@
 "use client"
 
 import { useState } from "react"
-import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel"
-import { cn } from "@/lib/utils"
+import { ArrowLeft, ArrowRight, Image, X } from "lucide-react";
+import { Button } from "@/components/ui/button";
 
 const images = [
-  {
-    src: "https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=1200&auto=format&fit=crop",
-    alt: "Machu Picchu bus on mountain road",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1723134084358-20a2dc177ff1?q=80&w=1200&auto=format&fit=crop",
-    alt: "Panoramic view of Machu Picchu",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1526392060635-9d601c43719e?q=80&w=1200&auto=format&fit=crop",
-    alt: "Aguas Calientes town",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1624571430789-0caff6e15f96?q=80&w=1200&auto=format&fit=crop",
-    alt: "Bus station Aguas Calientes",
-  },
-  {
-    src: "https://images.unsplash.com/photo-1580619305218-8423a7ef79b4?q=80&w=1200&auto=format&fit=crop",
-    alt: "Cloud forest road to Machu Picchu",
-  },
+  "https://d30oa1noalw1jv.cloudfront.net/images/IQLerwp2GRuvZwrhY4rw0akiWOz7FX-bus-machu-picchu/bus-machu-picchu.jpg",
+  "https://d30oa1noalw1jv.cloudfront.net/images/k2PrcgGuW8bnaTNQv8NvMXhCwG72jG-bus-machu-picchu/bus-machu-picchu.jpg",
+  "https://d30oa1noalw1jv.cloudfront.net/images/oU57wfnrQ1tEB7F30ce0qU8cpWbP0i-bus-machu-picchu/bus-machu-picchu.jpg",
+  "https://d30oa1noalw1jv.cloudfront.net/images/LMCuDkBrOFfepUJlHtImCeXg9f6I94-bus-machu-picchu/bus-machu-picchu.jpg",
+  "https://d30oa1noalw1jv.cloudfront.net/images/PEuq6pDmVxGXldWV0fDFwkB0zW7xB6-bus-machu-picchu/bus-machu-picchu.jpg",
+  "https://d30oa1noalw1jv.cloudfront.net/images/v5omXGtcvvEXwlhLBpQVPiNWTvhOwx-bus-machu-picchu/bus-machu-picchu.jpg",
 ]
 
-const Gallery = () => {
-  const [api, setApi] = useState<CarouselApi>()
-  const [current, setCurrent] = useState(0)
-  const [count, setCount] = useState(0)
+const galleryData = [
+  { image: images[0], className: "col-span-3 row-span-2 max-md:col-span-4 max-md:row-span-3" },
+  { image: images[1], className: "col-start-4 max-md:row-start-4 max-md:col-start-1" },
+  { image: images[2], className: "col-start-5 max-md:row-start-4 max-md:col-start-2" },
+  { image: images[3], className: "col-start-4 row-start-2 max-md:row-start-4 max-md:col-start-3" },
+  { image: images[4], className: "col-start-5 row-start-2 max-md:row-start-4 max-md:col-start-4" },
+];
 
-  const onSelect = (api: CarouselApi) => {
-    if (!api) return
-    setCurrent(api.selectedScrollSnap())
-    setCount(api.scrollSnapList().length)
-  }
+const Gallery = () => {
+  const [selectedIndex, setSelectedIndex] = useState<number | null>(null);
+
+  const handleNext = () => {
+    if (selectedIndex === null) return;
+    setSelectedIndex((prev) => (prev! + 1) % galleryData.length);
+  };
+
+  const handlePrev = () => {
+    if (selectedIndex === null) return;
+    setSelectedIndex((prev) => (prev! - 1 + galleryData.length) % galleryData.length);
+  };
+
+  const openLightbox = () => setSelectedIndex(0);
+  const closeLightbox = () => setSelectedIndex(null);
 
   return (
-    <section className="py-8">
-      <Carousel setApi={(api) => { setApi(api); if (api) { setCount(api.scrollSnapList().length); api.on("select", () => onSelect(api)) } }}>
-        <CarouselContent>
-          {images.map((image, index) => (
-            <CarouselItem key={index}>
-              <div className="aspect-21/9 max-md:aspect-4/3 rounded-2xl overflow-hidden">
-                <img
-                  src={image.src}
-                  alt={image.alt}
-                  className="w-full h-full object-cover"
-                />
-              </div>
-            </CarouselItem>
-          ))}
-        </CarouselContent>
-        <div className="flex justify-center gap-2 mt-4">
-          {Array.from({ length: count }).map((_, index) => (
-            <button
-              key={index}
-              onClick={() => api?.scrollTo(index)}
-              className={cn(
-                "rounded-full transition-all duration-300",
-                current === index
-                  ? "h-2 w-6 bg-orange-500"
-                  : "h-2 w-2 bg-border hover:bg-muted-foreground/50"
-              )}
-              aria-label={`Go to image ${index + 1}`}
+    <>
+      <div className="grid grid-cols-5 grid-rows-2 gap-3 max-md:gap-2 max-md:grid-cols-4 max-md:grid-rows-4 relative h-80 max-md:h-auto">
+        {galleryData.map((item, index) => (
+          <div
+            key={index}
+            className={`${item.className} overflow-hidden rounded-xl max-md:rounded-lg cursor-pointer bg-muted`}
+            onClick={() => setSelectedIndex(index)}
+          >
+            <img
+              src={item.image}
+              alt="MP"
+              className="object-cover w-full h-full hover:brightness-75 duration-300"
             />
-          ))}
+          </div>
+        ))}
+        <Button variant={"outline"} onClick={openLightbox} className="absolute bottom-0 right-0 m-3">
+          <Image />
+          Ver Galería
+        </Button>
+      </div>
+
+      {selectedIndex !== null && (
+        <div className="fixed w-full h-full top-0 left-0 bg-black/50 backdrop-blur-md flex items-center justify-center z-50 max-md:px-5">
+          <img
+            src={images[selectedIndex]}
+            alt="Full view"
+            className="max-w-5xl max-h-[80vh] max-md:w-full rounded-3xl shadow-lg transition-all select-none"
+          />
+
+          <Button
+            variant={"secondary"}
+            size={"icon"}
+            onClick={closeLightbox}
+            className="absolute top-5 right-5 rounded-full"
+          >
+            <X size={20} />
+          </Button>
+
+          <Button
+            variant={"secondary"}
+            size={"icon"}
+            onClick={handlePrev}
+            className="absolute left-5 max-md:left-1 max-md:scale-90 rounded-full"
+          >
+            <ArrowLeft size={20} />
+          </Button>
+
+          <Button
+            variant={"secondary"}
+            size={"icon"}
+            onClick={handleNext}
+            className="absolute right-5 max-md:right-1 max-md:scale-90 rounded-full"
+          >
+            <ArrowRight size={20} />
+          </Button>
         </div>
-      </Carousel>
-    </section>
+      )}
+    </>
   )
 }
 

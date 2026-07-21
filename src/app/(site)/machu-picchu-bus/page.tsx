@@ -1,5 +1,5 @@
 import type { Metadata } from "next"
-import { Bus, Calendar, Clock, Route, ShieldCheck, MapPin, Camera, Sun, Wifi, CheckCircle, XCircle, ChevronRight, Navigation } from "lucide-react"
+import { Bus, Calendar, Clock, Route, ShieldCheck, MapPin, Camera, Sun, Wifi, CheckCircle, XCircle, ChevronRight, Navigation, Verified } from "lucide-react"
 import { Button } from "@/components/ui/button"
 import Gallery from "./gallery"
 import FAQs from "./faqs"
@@ -51,56 +51,37 @@ const BusServicePage = () => {
   return (
     <>
       {/* Hero */}
-      <section className="relative">
-        <div className="h-[70vh] relative w-full grid place-items-center max-md:h-[80vh]">
-          <img
-            src="https://images.unsplash.com/photo-1587595431973-160d0d94add1?q=80&w=2000&auto=format&fit=crop"
-            alt="Machu Picchu bus"
-            className="absolute inset-0 h-full w-full object-cover"
-          />
-          <div className="absolute inset-0 bg-linear-to-r from-black/80 to-black/20" />
-          <div className="absolute text-white max-w-6xl w-full max-md:px-5">
-            <div className="flex items-center gap-3 text-sm py-2 px-4 rounded-full bg-white/15 backdrop-blur-lg w-fit mb-6">
-              <Bus className="text-orange-500 size-4" />
+      <section className="">
+        <div className="max-w-6xl mx-auto mt-20 pt-16 space-y-10">
+          <div className="max-w-6xl w-full space-y-3 max-md:px-5">
+            <div className="flex items-center gap-2 text-sm">
+              <Verified className="size-4" />
               <span>Official bus service to Machu Picchu</span>
             </div>
-            <h1 className="text-5xl font-bold mb-5 max-md:text-4xl">
-              Bus from Aguas Calientes<br />
-              <span className="text-orange-400">to Machu Picchu</span>
+
+            <h1 className="text-4xl font-bold">
+              Bus from Aguas Calientes to Machu Picchu
             </h1>
-            <p className="text-lg max-w-xl max-md:text-base">
-              Book your official shuttle between Aguas Calientes (Machu Picchu Pueblo) and
-              the entrance of Machu Picchu. Fast, secure, instant confirmation.
-            </p>
-            <div className="flex gap-4 mt-8">
-              <a href="#pricing">
-                <Button variant="hero" size="lg" className="font-semibold">
-                  See Prices & Book
-                  <ChevronRight size={16} />
-                </Button>
-              </a>
-            </div>
+            
           </div>
+          <Gallery />
         </div>
       </section>
 
       {/* Content + Sidebar Layout */}
-      <div className="max-w-7xl mx-auto px-5 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 py-12 pb-28 lg:pb-12">
+      <div className="max-w-6xl mx-auto max-md:px-5 grid grid-cols-1 lg:grid-cols-[1fr_380px] gap-8 py-12 lg:pb-12">
         {/* Main Content */}
         <div>
-          {/* Gallery */}
-          <Gallery />
-
           {/* Specs */}
-          <section className="py-16 max-md:py-12">
+          <section className="pb-12">
             <div className="space-y-8">
               <h2 className="text-3xl font-semibold tracking-tight">
                 Bus Service Overview
               </h2>
-              <div className="grid grid-cols-2 md:grid-cols-4 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 {specs.map((item, index) => (
                   <div key={index} className="bg-card border rounded-2xl p-5 flex items-center gap-4">
-                    <item.icon className="size-10 shrink-0 text-orange-500" />
+                    <item.icon className="shrink-0 text-orange-500" />
                     <div className="flex flex-col gap-1">
                       <h3 className="text-muted-foreground text-sm">{item.title}</h3>
                       <p className="font-semibold text-base">{item.description}</p>
@@ -236,7 +217,6 @@ const BusServicePage = () => {
           </section>
 
           {/* Prices */}
-          <PricingSection />
 
           {/* What's Included */}
           <section className="py-16 max-md:py-12 border-t">
