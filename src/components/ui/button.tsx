@@ -8,7 +8,7 @@ const buttonVariants = cva(
   {
     variants: {
       variant: {
-        default: "bg-primary text-primary-foreground hover:bg-primary/80",
+        default: "bg-orange-500 hover:bg-orange-600 text-white",
         outline:
           "border-border bg-background hover:bg-muted hover:text-foreground aria-expanded:bg-muted aria-expanded:text-foreground dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
         secondary:
@@ -20,7 +20,7 @@ const buttonVariants = cva(
         link: "text-primary underline-offset-4 hover:underline",
         hero: "bg-white text-foreground dark:text-background hover:bg-white/80",
         "hero-outline": "border border-input/25 bg-input/10 hover:bg-input/20 dark:border-input dark:bg-input/30 dark:hover:bg-input/50",
-        search: "max-md:rounded-2xl max-md:w-full bg-foreground text-background font-semibold hover:bg-orange-500 hover:text-white text-lg max-md:text-base",
+        search: "max-md:rounded-2xl max-md:w-full font-semibold bg-orange-500 hover:bg-orange-600 text-white text-lg max-md:text-base",
       },
       size: {
         default:

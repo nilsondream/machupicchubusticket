@@ -1,21 +1,14 @@
-import { CheckCircle, Verified } from "lucide-react"
+"use client";
 
-const Recommended = () => {
+import { CheckCircle } from "lucide-react";
+
+const Recommendations = () => {
   return (
-    <section 
-      id="machu-picchu-bus-schedule" 
-      className="py-24 max-md:py-20"
-    >
-      <div className="max-w-6xl mx-auto max-md:px-5 grid md:grid-cols-2 gap-12 items-center">
-        
-        <div className="space-y-6">
-          <p className="inline-flex items-center gap-1 text-sm font-medium text-muted-foreground mb-5">
-            <Verified size={17} />
-            Official Transport
-          </p>
-          
+    <section className="py-24 max-md:py-20">
+      <div className="max-w-6xl mx-auto max-md:px-5 grid grid-cols-3 max-md:grid-cols-1 gap-10 items-start">
+        <div className="space-y-6 col-span-1">          
           <h2 className="text-3xl font-semibold tracking-tight leading-tight">
-            Your trusted platform for <span className="text-primary">bus tickets to Machu Picchu</span>
+            Your trusted platform for <span className="text-orange-500">bus tickets to Machu Picchu</span>
           </h2>
           
           <p className="leading-relaxed">
@@ -36,7 +29,7 @@ const Recommended = () => {
           </div>
         </div>
 
-        <div className="w-full border rounded-2xl overflow-hidden bg-card">
+        <div className="w-full border rounded-2xl overflow-hidden bg-card col-span-2 max-md:col-span-1">
           <div className="bg-muted/80 px-6 py-4 border-b">
             <h3 className="font-semibold text-lg flex items-center gap-2">
               Recommended Bus Schedule to Machu Picchu
@@ -75,7 +68,7 @@ const Recommended = () => {
         </div>
       </div>
     </section>
-  )
-}
+  );
+};
 
-export default Recommended
+export default Recommendations;

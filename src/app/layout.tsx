@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Instrument_Sans, Onest } from "next/font/google";
+import { Onest } from "next/font/google";
 import { ThemeProvider } from "@/providers/theme";
 import { PayPalProvider } from "@/providers/paypal";
 import { AuthProvider } from "@/contexts/auth-context";
@@ -7,7 +7,7 @@ import { Toaster } from "@/components/ui/sonner";
 import { cn } from "@/lib/utils";
 import "./globals.css";
 
-const instrumentSans = Instrument_Sans({ subsets: ["latin"] });
+const onest = Onest({ subsets: ["latin"] });
 
 export const metadata: Metadata = {
   title: "Machu Picchu Bus Tickets 2026 | Book Online Fast & Secure",
@@ -56,7 +56,7 @@ export default function RootLayout({
       lang="en"
       suppressHydrationWarning
     >
-      <body className={cn("antialiased", instrumentSans.className)}>
+      <body className={cn("antialiased", onest.className)}>
         <ThemeProvider
           attribute="class"
           defaultTheme="system"

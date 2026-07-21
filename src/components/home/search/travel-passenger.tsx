@@ -6,8 +6,10 @@ import { useReservationStore } from "@/store/reservation.store";
 import { PassengerType } from "@/lib/pricing";
 
 const PASSENGER_TYPE_LABELS: Record<PassengerType, { title: string; subtitle?: string }> = {
-  adult: { title: "Adult" },
-  child: { title: "Child", subtitle: "Age 3 to 11 years" },
+  adult: { title: "Peruvian adult" },
+  child: { title: "Peruvian child", subtitle: "Age 5 to 11 years" },
+  adultForeign: { title: "Foreign adult" },
+  childForeign: { title: "Foreign child", subtitle: "Age 5 to 11 years" },
 };
 
 function Counter({ type }: { type: PassengerType }) {
@@ -23,7 +25,7 @@ function Counter({ type }: { type: PassengerType }) {
         {subtitle && <p className="text-xs text-muted-foreground">({subtitle})</p>}
       </div>
       <div className="flex items-center">
-        <Button variant="outline" size="icon" className="rounded-full" onClick={() => decrement(type)} disabled={count === 0}>
+        <Button variant="outline" size="icon" className="rounded-full" onClick={() => decrement(type)} disabled={count <= 1}>
           <Minus size={16} />
         </Button>
         <span className="w-8 text-center font-medium">{count}</span>
@@ -92,6 +94,10 @@ const TravelPassenger = ({ edit }: { edit?: boolean }) => {
             <Counter type="adult" />
             <hr />
             <Counter type="child" />
+            <hr />
+            <Counter type="adultForeign" />
+            <hr />
+            <Counter type="childForeign" />
           </div>
         </div>
       )}

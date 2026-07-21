@@ -2,32 +2,27 @@ import { Check, ChevronRight, Star } from "lucide-react"
 
 const GuideBanner = () => {
   return (
-    <section className="relative overflow-hidden bg-linear-to-br from-red-500 to-red-700">
-      <div className="max-w-6xl mx-auto grid grid-cols-2 items-center">
-        <div className="text-white space-y-6">
-          <div className="inline-flex items-center gap-2">
-            <Star size={20} />
+    <section className="max-md:px-5 py-20">
+      <div className="max-w-6xl mx-auto grid grid-cols-5 items-center max-md:grid-cols-1 pr-10 pl-16 max-md:px-0 relative overflow-hidden rounded-3xl bg-linear-to-br from-orange-500 to-orange-700">
+        <div className="col-span-3 text-white space-y-4 max-md:px-5 max-md:pt-5">
+          <div className="inline-flex items-center gap-2 text-sm">
+            <Star size={16} />
             Expert Local Guides
           </div>
-
-          <h1 className="text-5xl font-bold tracking-tight leading-tight mb-6">
+          <h2 className="text-4xl font-bold tracking-tight leading-tight">
             Book your official <br /><span className="">Machu Picchu Guide</span>
-          </h1>
-
+          </h2>
           <p>
             Make your visit unforgettable with a professional English-speaking guide.
             Learn the history, secrets, and stories behind the Lost City of the Incas.
           </p>
-
-          <a
-            className="cursor-pointer hover:brightness-90 bg-white text-black flex items-center gap-2 w-fit px-5 py-3 rounded-lg text-sm font-medium"
-          >
+          <a className="cursor-pointer hover:brightness-90 bg-white text-black flex items-center gap-2 w-fit px-5 py-3 rounded-lg text-sm font-medium">
             Book Your Guide Now
             <ChevronRight size={16} />
           </a>
 
           {/* Trust Bar */}
-          <div className="flex flex-wrap gap-x-8 gap-y-3 mt-12 text-sm">
+          <div className="flex flex-wrap gap-x-8 gap-y-3 mt-8 text-sm">
             <div className="flex items-center gap-2">
               <Check size={14} />
               Certified Guides
@@ -42,7 +37,7 @@ const GuideBanner = () => {
             </div>
           </div>
         </div>
-        <div className="mt-20">
+        <div className="translate-y-10 max-md:px-5 max-md:mt-0 col-span-2">
           <img src="/images/guide-mpbt.webp" alt="Guide" />
         </div>
       </div>

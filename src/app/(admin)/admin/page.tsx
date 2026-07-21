@@ -9,6 +9,7 @@ import { Badge } from "@/components/ui/badge"
 import { Loader2, Ticket, UsersRound, BookOpen, DollarSign } from "lucide-react"
 import Link from "next/link"
 import { TRIP_TYPE_LABELS, PAYMENT_METHOD_LABELS } from "@/data/tickets.data"
+import { Button } from "@/components/ui/button"
 
 type Stats = {
   totalReservations: number
@@ -156,9 +157,10 @@ const AdminDashboard = () => {
           <h2 className="text-xl font-semibold">Reservas Recientes</h2>
           <Link
             href="/admin/reservations"
-            className="text-sm text-orange-500 hover:text-orange-600 transition-colors"
           >
-            View all
+            <Button>
+              Ver todos
+            </Button>
           </Link>
         </div>
 

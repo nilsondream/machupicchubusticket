@@ -60,7 +60,7 @@ const Reviews = () => {
   return (
     <section className="py-24 max-md:py-20">
       <div className="max-w-6xl mx-auto max-md:px-5">
-        <div className="text-center mb-16">
+        <div className="text-center mb-10">
           <h2 className="text-3xl font-semibold tracking-tight mb-4">
             What our travelers say
           </h2>
@@ -80,7 +80,7 @@ const Reviews = () => {
                         <Star key={i} size={16} className="fill-current text-orange-500" />
                       ))}
                     </div>
-                    <p className="mb-8 grow leading-relaxed">
+                    <p className="mb-8 grow leading-relaxed max-md:line-clamp-3">
                       {testimonial.content}
                     </p>
                     <div className="flex items-center gap-4">

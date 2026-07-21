@@ -39,14 +39,14 @@ const SidebarAdmin = () => {
         <Icons.LogoIcon className="w-9 shrink-0" />
         <p className="truncate">machupicchubusticket.com</p>
       </Link>
-      <div className="grid grid-cols-1 gap-2 mt-8">
+      <div className="grid grid-cols-1 gap-3 mt-10">
         {sidebarNavigations.map((item, index) => (
           <Link
             href={item.path}
             key={index}
-            className={cn("flex items-center gap-2.5 py-2 px-3 rounded-lg text-sm font-medium", isActive(item.path) ? "bg-foreground text-background" : "hover:bg-muted")}
+            className={cn("flex items-center gap-3 font-semibold", isActive(item.path) ? "text-foreground" : "text-muted-foreground hover:text-foreground")}
           >
-            <item.icon className="size-4" />
+            <item.icon size={20} />
             {item.label}
           </Link>
         ))}

@@ -14,6 +14,7 @@ import { Loader2, Plus, Pencil, Trash2, Search, Upload, X, Eye } from "lucide-re
 import { toast } from "sonner"
 import { Dialog, DialogHeader, DialogBody, DialogFooter } from "@/components/ui/dialog"
 import Image from "next/image"
+import { cn } from "@/lib/utils"
 
 type BlogPost = {
   id: string
@@ -365,13 +366,14 @@ const AdminBlogsPage = () => {
 
                 <div className="space-y-2">
                   <Label>Imagen destacada</Label>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-1">
                     <Button
                       type="button"
                       variant="outline"
                       size="lg"
                       disabled={uploadingCover}
                       onClick={() => document.getElementById("modal-cover-upload")?.click()}
+                      className={cn("rounded-md", form.coverImage ? "w-3/5" : "w-full")}
                     >
                       {uploadingCover ? (
                         <Loader2 className="size-4 mr-1 animate-spin" />
@@ -387,27 +389,29 @@ const AdminBlogsPage = () => {
                       className="hidden"
                       onChange={handleCoverUpload}
                     />
-                    {form.coverImage && (
-                      <Button
-                        type="button"
-                        variant="ghost"
-                        size="icon-lg"
-                        onClick={() => setForm((prev) => ({ ...prev, coverImage: "" }))}
-                      >
-                        <X className="size-4" />
-                      </Button>
-                    )}
-                  </div>
-                  {form.coverImage && (
-                    <div className="relative aspect-2/1 rounded-lg overflow-hidden border mt-2">
-                      <Image
-                        src={form.coverImage}
-                        alt="Cover"
-                        fill
-                        className="object-cover"
-                      />
+                    <div className="flex items-center gap-1 shrink-0">
+                      {form.coverImage && (
+                        <div className="relative size-10 aspect-square rounded-md overflow-hidden border">
+                          <img
+                            src={form.coverImage}
+                            alt="Cover"
+                            className="object-cover w-full h-full"
+                          />
+                        </div>
+                      )}
+
+                      {form.coverImage && (
+                        <Button
+                          type="button"
+                          variant="secondary"
+                          size="icon-lg"
+                          onClick={() => setForm((prev) => ({ ...prev, coverImage: "" }))}
+                        >
+                          <X className="size-4" />
+                        </Button>
+                      )}
                     </div>
-                  )}
+                  </div>
                 </div>
               </div>
 

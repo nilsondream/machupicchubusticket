@@ -1,10 +1,17 @@
+"use client"
+
 import Link from "next/link"
 import Icons from "@/components/ui/icons"
 import { Button } from "@/components/ui/button"
+import { cn } from "@/lib/utils"
+import { usePathname } from "next/navigation"
 
 const Footer = () => {
+  const pathname = usePathname()
+  const isHome = pathname === "/"
+
   return (
-    <footer className="bg-foreground text-background dark:bg-background dark:text-foreground">
+    <footer className={cn("bg-foreground text-background dark:bg-background dark:text-foreground", !isHome && "border-t")}>
       <div className="max-w-6xl mx-auto max-md:px-5 py-16">
         <div className="grid grid-cols-5 gap-20 mb-40 max-md:mb-20 max-md:grid-cols-1">
           <div className="col-span-2">
@@ -56,7 +63,7 @@ const Footer = () => {
           </div>
         </div>
 
-        <div className="pt-8 border-t border-white/25 text-sm flex flex-col md:flex-row justify-between items-center gap-4">
+        <div className="pt-8 border-t border-white/25 text-sm flex flex-col md:flex-row justify-between md:items-center gap-4">
           <p>&copy; {new Date().getFullYear()} Machu Picchu Bus Ticket. All rights reserved.</p>
           <div className="flex gap-8 max-md:inline-block max-md:space-x-5 [&_a]:hover:text-orange-500">
             <Link href="/terms">Terms and Conditions</Link>

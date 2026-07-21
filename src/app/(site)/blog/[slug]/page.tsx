@@ -61,7 +61,7 @@ const BlogPostPage = async ({ params }: Props) => {
   return (
     <main className="min-h-screen">
       <article>
-        <div className="h-150 mt-14 w-full relative grid place-items-center">
+        <div className="h-120 mt-18 w-full relative grid place-items-center">
           <div className="absolute z-10 grid place-items-center w-full">
             <div className="w-6xl mx-auto mt-10 text-white">
               <Link
@@ -82,27 +82,10 @@ const BlogPostPage = async ({ params }: Props) => {
                   {blog.excerpt}
                 </p>
               )}
-
-              <div className="flex items-center gap-5 text-sm mt-4">
-                <div className="flex items-center gap-2">
-                  <Calendar size={15} />
-                  {blog.createdAt && (
-                    <time dateTime={blog.createdAt.toISOString()}>
-                      {format(parseISO(blog.createdAt.toISOString()), "MMMM dd, yyyy")}
-                    </time>
-                  )}
-                </div>
-                {blog.author && (
-                  <div className="flex items-center gap-2">
-                    <User size={15} />
-                    <span>{blog.author}</span>
-                  </div>
-                )}
-              </div>
             </div>
           </div>
 
-          <div className="w-full h-full bg-linear-to-t from-black/75 absolute z-5"></div>
+          <div className="w-full h-full bg-black/50 absolute z-5"></div>
 
           {blog.coverImage && (
             <div className="absolute inset-0 z-0 overflow-hidden">
@@ -115,7 +98,23 @@ const BlogPostPage = async ({ params }: Props) => {
           )}
         </div>
 
-        <div className="max-w-6xl mx-auto pb-20 pt-10">
+        <div className="max-w-6xl mx-auto pb-20 pt-10 space-y-10">
+          <div className="flex items-center gap-10 text-sm mt-4 text-muted-foreground">
+            {blog.author && (
+              <div className="flex items-center gap-2">
+                Written by:
+                <span>{blog.author}</span>
+              </div>
+            )}
+            <div className="flex items-center gap-2">
+              Last Updated:
+              {blog.createdAt && (
+                <time dateTime={blog.createdAt.toISOString()}>
+                  {format(parseISO(blog.createdAt.toISOString()), "MMMM dd, yyyy")}
+                </time>
+              )}
+            </div>
+          </div>
           <div
             className="max-w-none [&_a]:text-orange-500 [&_a]:hover:underline [&_li]:list-disc [&_ul]:ml-5 [&_p]:mb-5 [&_h2]:text-2xl [&_h2]:mt-10 [&_p]:last:mb-0"
             dangerouslySetInnerHTML={{ __html: blog.content || "" }}

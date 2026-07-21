@@ -4,6 +4,7 @@ import Image from "next/image"
 import { format, parseISO } from "date-fns"
 import { ArrowRight } from "lucide-react"
 import { Button } from "@/components/ui/button"
+import { Carousel, CarouselContent, CarouselItem, type CarouselApi } from "@/components/ui/carousel"
 
 const Blogs = async () => {
   let blogs: {
@@ -34,7 +35,7 @@ const Blogs = async () => {
   if (blogs.length === 0) return null
 
   return (
-    <section className="border-y py-24 bg-background">
+    <section className="py-24 bg-background">
       <div className="max-w-6xl mx-auto space-y-12 max-md:px-5">
         <div className="flex items-end justify-center">
           <div className="space-y-4 text-center">
@@ -47,51 +48,54 @@ const Blogs = async () => {
           </div>
         </div>
 
-        <div className="grid md:grid-cols-3 gap-6">
-          {blogs.map((blog) => (
-            <Link
-              key={blog.slug}
-              href={`/blog/${blog.slug}`}
-              className="group block"
-            >
-              <article className="border rounded-2xl overflow-hidden transition-shadow h-full">
-                {blog.coverImage && (
-                  <div className="relative aspect-video overflow-hidden">
-                    <Image
-                      src={blog.coverImage}
-                      alt={blog.title}
-                      fill
-                      className="object-cover group-hover:scale-105 transition-transform duration-300"
-                      sizes="(max-width: 768px) 100vw, 33vw"
-                    />
-                  </div>
-                )}
-                <div className="p-5 space-y-3">
-                  <p className="text-xs text-muted-foreground">
-                    {format(parseISO(blog.createdAt.toISOString()), "MMM dd, yyyy")}
-                  </p>
-                  <h3 className="font-semibold group-hover:text-orange-500 transition-colors line-clamp-2">
-                    {blog.title}
-                  </h3>
-                  {blog.excerpt && (
-                    <p className="text-sm text-muted-foreground line-clamp-2">
-                      {blog.excerpt}
-                    </p>
-                  )}
-                </div>
-              </article>
-            </Link>
-          ))}
-        </div>
+        <Carousel>
+          <CarouselContent>
+            {blogs.map((blog, index) => (
+              <CarouselItem key={index} className="basis-1/3 max-md:basis-full">
+                <Link
+                  href={`/blog/${blog.slug}`}
+                  className="group block"
+                >
+                  <article className="border rounded-2xl overflow-hidden transition-shadow h-full">
+                    {blog.coverImage && (
+                      <div className="relative aspect-video overflow-hidden">
+                        <Image
+                          src={blog.coverImage}
+                          alt={blog.title}
+                          fill
+                          className="object-cover group-hover:scale-105 transition-transform duration-300"
+                          sizes="(max-width: 768px) 100vw, 33vw"
+                        />
+                      </div>
+                    )}
+                    <div className="p-5 space-y-3">
+                      <p className="text-xs text-muted-foreground">
+                        {format(parseISO(blog.createdAt.toISOString()), "MMM dd, yyyy")}
+                      </p>
+                      <h3 className="font-semibold group-hover:text-orange-500 transition-colors line-clamp-2">
+                        {blog.title}
+                      </h3>
+                      {blog.excerpt && (
+                        <p className="text-sm text-muted-foreground line-clamp-2">
+                          {blog.excerpt}
+                        </p>
+                      )}
+                    </div>
+                  </article>
+                </Link>
+              </CarouselItem>
+            ))}
+          </CarouselContent>
+        </Carousel>
 
         <div className="text-center">
-            <Link
+          <Link
             href="/blog"
-            >
-            <Button>
-            View all articles
-            <ArrowRight />
-          </Button>
+          >
+            <Button size={"lg"}>
+              View all articles
+              <ArrowRight />
+            </Button>
           </Link>
         </div>
       </div>

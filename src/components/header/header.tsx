@@ -3,7 +3,7 @@
 import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/lib/utils";
-import { X, LogOut, Ticket, Equal, LayoutGrid } from "lucide-react";
+import { X, LogOut, Ticket, Equal, LayoutGrid, ChevronDown } from "lucide-react";
 import SidebarMobile from "./sidebar-mobile";
 import Link from "next/link";
 import Settings from "./settings";
@@ -44,18 +44,33 @@ const Header = () => {
   return (
     <>
       <header className={cn("fixed top-0 left-0 w-full z-50", (isActive("/") || isActive("/es")) ? (scroll || openMenuMobile) ? "bg-background text-foreground border-b" : "text-white border-b border-transparent" : "bg-background text-foreground border-b")}>
-        <div className="max-w-6xl mx-auto h-18 flex items-center max-md:px-5 justify-between">
-          <Link href="/" className="flex items-center gap-4 font-semibold text-xl hover:text-orange-500">
+        <div className="px-16 h-18 max-md:h-16 flex items-center max-md:px-5 justify-between">
+          <Link href="/" className="flex items-center gap-4 font-semibold text-xl max-md:text-lg hover:text-orange-500">
             <Icons.LogoIcon className="w-9" />
             <p>machupicchubusticket.com</p>
           </Link>
           <div className="flex justify-end items-center gap-3 max-md:hidden">
-            <Button variant="ghost">
-              <Link href={"/reservation/ticket"}>Search ticket</Link>
-            </Button>
-            <Button variant="ghost">
-              <Link href={"/blog"}>Blog</Link>
-            </Button>
+            <Link href={"/reservation/ticket"}>
+              <Button variant="ghost">
+                Information
+                <ChevronDown />
+              </Button>
+            </Link>
+            <Link href={"/machu-picchu-bus"}>
+              <Button variant="ghost">
+                Machu Picchu Bus
+              </Button>
+            </Link>
+            <Link href={"/reservation/ticket"}>
+              <Button variant="ghost">
+                Search ticket
+              </Button>
+            </Link>
+            <Link href={"/blog"}>
+              <Button variant="ghost">
+                Blog
+              </Button>
+            </Link>
             <Settings />
 
             {status === "authenticated" && user ? (
@@ -77,13 +92,13 @@ const Header = () => {
                     </div>
                     {user.role === "user" && (
                       <Link
-                      href="/my-reservations"
-                      onClick={() => setOpenProfile(false)}
-                      className="flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all"
-                    >
-                      My Reservations
-                      <Ticket className="size-4" />
-                    </Link>
+                        href="/my-reservations"
+                        onClick={() => setOpenProfile(false)}
+                        className="flex items-center justify-between gap-2 w-full px-3 py-2 text-sm rounded-xl hover:bg-muted transition-all"
+                      >
+                        My Reservations
+                        <Ticket className="size-4" />
+                      </Link>
                     )}
                     {user.role === "admin" && (
                       <Link

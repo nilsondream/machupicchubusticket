@@ -173,7 +173,7 @@ const AdminReservationsPage = () => {
           ))}
           {statusFilter && (
             <Button
-              variant="ghost"
+              variant="secondary"
               size="icon-lg"
               onClick={() => setStatusFilter("")}
             >
@@ -202,7 +202,7 @@ const AdminReservationsPage = () => {
           ))}
           {paymentFilter && (
             <Button
-              variant="ghost"
+              variant="secondary"
               size="icon-lg"
               onClick={() => setPaymentFilter("")}
             >
@@ -310,10 +310,10 @@ const AdminReservationsPage = () => {
                   {expandedId === r.id && (
                     <tr className="border-b last:border-none">
                       <td colSpan={10} className="p-0">
-                        <div className="bg-muted/20 px-4 py-4">
-                          <div className="grid grid-cols-2 gap-6 text-sm">
+                        <div className="p-4">
+                          <div className="grid grid-cols-2 gap-4 text-sm">
                             {/* Pasajeros */}
-                            <div>
+                            <div className="p-5 rounded-xl border">
                               <p className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">
                                 Pasajeros ({r.passengers.length})
                               </p>
@@ -333,7 +333,7 @@ const AdminReservationsPage = () => {
                             </div>
 
                             {/* Detalles financieros */}
-                            <div>
+                            <div className="p-5 rounded-xl border">
                               <p className="text-xs text-muted-foreground mb-2 font-medium uppercase tracking-wider">
                                 Detalles
                               </p>
