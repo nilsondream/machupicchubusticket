@@ -1,13 +1,13 @@
-export type PassengerType = "adult" | "child" | "adultForeign" | "childForeign" ;
+export type PassengerType = "adult" | "child" ;
 export type PaymentMethod = "paypal" | "card" | "transfer" | "none";
 export type PaymentAmountType = "total" | "half" | "none";
 export type TripType = "round_trip" | "one_way" | "return_only";
 
 // Tarifa base por tipo de viaje y tipo de pasajero (ajustar según tus tarifas reales).
 export const PASSENGER_PRICING: Record<TripType, Record<PassengerType, number>> = {
-  round_trip: { adult: 22, child: 13, adultForeign: 34, childForeign: 18 },     // ida + vuelta
-  one_way: { adult: 14, child: 13, adultForeign: 19, childForeign: 13 },        // solo ida
-  return_only: { adult: 14, child: 13, adultForeign: 19, childForeign: 13 },    // solo retorno
+  round_trip: { adult: 22, child: 13, },     // ida + vuelta
+  one_way: { adult: 14, child: 13, },        // solo ida
+  return_only: { adult: 14, child: 13, },    // solo retorno
 };
 
 // Comisión por método de pago, como porcentaje del monto que se cobra

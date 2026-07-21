@@ -16,6 +16,4 @@ export const PAYMENT_METHOD_LABELS: Record<PaymentMethod, string> = {
 export const PASSENGER_TYPE_LABELS: Record<PassengerType, { title: string; subtitle: string }> = {
   adult: { title: "Adult", subtitle: "12+ años" },
   child: { title: "Child", subtitle: "5-11 años" },
-  adultForeign: { title: "Foreign dult", subtitle: "12+ años" },
-  childForeign: { title: "Foreign child", subtitle: "5-11 años" },
 };
